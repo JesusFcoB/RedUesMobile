@@ -2,6 +2,7 @@ package com.example.reduesmobile.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +43,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun iniciarSesion(loginRequest: LoginRequest) {
+        binding.loadingCard.visibility = View.VISIBLE
+        binding.cargando.visibility = View.VISIBLE
+        deshabilitarClicks()
+
         lifecycleScope.launch {
             try {
                 val api = RetrofitInstance.Companion
@@ -66,8 +71,30 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@MainActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
+            } finally {
+                binding.loadingCard.visibility = View.GONE
+                binding.cargando.visibility = View.GONE
+                habilitarClicks()
             }
         }
+    }
+
+    private fun deshabilitarClicks() {
+        binding.txtUsuario.isFocusable = false
+        binding.txtUsuario.isFocusableInTouchMode = false
+        binding.txtPassword.isFocusable = false
+        binding.txtPassword.isFocusableInTouchMode = false
+        binding.btnLogin.isEnabled = false
+        binding.txtRegister.isEnabled = false
+    }
+
+    private fun habilitarClicks() {
+        binding.txtUsuario.isFocusable = true
+        binding.txtUsuario.isFocusableInTouchMode = true
+        binding.txtPassword.isFocusable = true
+        binding.txtPassword.isFocusableInTouchMode = true
+        binding.btnLogin.isEnabled = true
+        binding.txtRegister.isEnabled = true
     }
 
 }

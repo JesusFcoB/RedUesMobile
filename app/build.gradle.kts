@@ -58,6 +58,7 @@ dependencies {
     implementation("com.auth0.android:jwtdecode:2.0.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.cardview)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")

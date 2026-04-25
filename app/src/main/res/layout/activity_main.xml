@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.814" />
 
+
     <EditText
         android:id="@+id/txtPassword"
         android:layout_width="248dp"
@@ -67,6 +68,7 @@
         android:backgroundTint="@color/fondoLoginbtn"
         android:text="Iniciar Sesion"
         android:textSize="16sp"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
         app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
         app:layout_constraintHorizontal_bias="0.493"
@@ -111,6 +113,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/loadingCard"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cardBackgroundColor="@color/fondoLogin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="16dp"
+        android:visibility="gone">
+
+
+        <ProgressBar
+            android:id="@+id/cargando"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:indeterminateTint="#5f0716"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        />
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
