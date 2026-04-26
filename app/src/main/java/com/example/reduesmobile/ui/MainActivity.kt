@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     Toast.makeText(this@MainActivity, "Error de credenciales", Toast.LENGTH_LONG).show()
-                    // Personalizar error de inicio de sesion fallido
+                    //TODO: personalizar error de inicio de sesion fallido
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@MainActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
