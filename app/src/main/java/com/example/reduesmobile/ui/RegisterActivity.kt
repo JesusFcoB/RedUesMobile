@@ -31,6 +31,15 @@ class RegisterActivity : AppCompatActivity() {
         listener()
 
         binding.btnRegister.setOnClickListener {
+
+            //Aqui se deberia de validar las bainas locas
+            val error = validarCampos()
+
+            if (error != null) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val usuario = binding.txtUsuario.text.toString()
             val correo = binding.txtEmail.text.toString()
             val carrera = binding.spCarrera.selectedItem.toString().substringBefore(" (")
@@ -39,10 +48,15 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPassword = binding.txtConfirmPassword.text.toString()
 
 
-            //TODO: validar las entradas antes de crear el objeto
+            //TODO: validar las entradas antes de crear el objeto(listoso oso)
+
+
+
+
             val registerRequest: RegisterRequest = RegisterRequest(
                 usuario, correo, carrera, semestre, password, confirmPassword
             )
+
             registrar(registerRequest)
         }
 
@@ -67,8 +81,14 @@ class RegisterActivity : AppCompatActivity() {
                         request.password)
                     iniciarSesion(api, loginRequest)
                 } else {
-                    Toast.makeText(this@RegisterActivity, "Error de credenciales", Toast.LENGTH_LONG)
-                        .show()
+                    val errorBody = response.errorBody()?.string()
+
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Error al registrar: ${errorBody ?: "Datos incorrectos"}",
+                        Toast.LENGTH_LONG
+                    ).show()
+
                     //TODO: personalizar error de inicio de sesion fallido
                 }
             } catch (e: Exception) {
@@ -115,4 +135,23 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+    private fun validarCampos(): String? {
+        val usuario = binding.txtUsuario.text.toString()
+        val correo = binding.txtEmail.text.toString()
+        val password = binding.txtPassword.text.toString()
+        val confirmPassword = binding.txtConfirmPassword.text.toString()
+
+        if (usuario.isEmpty()) return "El usuario está vacío"
+        if (correo.isEmpty()) return "El correo está vacío"
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) return "Correo inválido"
+        if (password.length < 6) return "La contraseña debe tener al menos 6 caracteres"
+        if (password != confirmPassword) return "Las contraseñas no coinciden"
+        if (binding.spCarrera.selectedItemPosition == 0) return "Selecciona una carrera"
+        if (binding.spSemestre.selectedItemPosition == 0) return "Selecciona un semestre"
+
+        return null // todo bien
+    }
+
+
+
 }
