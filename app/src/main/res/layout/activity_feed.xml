@@ -8,87 +8,8 @@
     android:background="#5f0716"
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
-    tools:context=".ui.feed">
+    tools:context=".ui.FeedActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/Post"
-        android:layout_width="382dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="58dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buscar">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/contenido"
-            android:layout_width="337dp"
-            android:layout_height="122dp"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/fondoLogin" />
-
-        <ImageView
-            android:id="@+id/perfil"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/perfil" />
-
-        <TextView
-            android:id="@+id/txtUsuarioPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="61dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-black"
-            android:text="Usuario"
-            android:textSize="25sp" />
-
-        <ImageView
-            android:id="@+id/btnComentar"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:clickable="true"
-            android:contentDescription="Comentar"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/comentario" />
-
-        <ImageView
-            android:id="@+id/btnGuardar"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="58dp"
-            android:clickable="true"
-            android:contentDescription="Guardar publicación"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/guardado" />
-
-        <ImageView
-            android:id="@+id/btnLike"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="106dp"
-            android:clickable="true"
-            android:contentDescription="Dar like"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/like" />
-    </androidx.cardview.widget.CardView>
 
     <SearchView
         android:id="@+id/buscar"
