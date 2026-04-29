@@ -14,11 +14,11 @@ class FeedActivity : AppCompatActivity() {
         binding = ActivityFeedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnLogout.setOnClickListener {
-            TokenManager(this).deleteToken()
-            val logout = Intent(this, MainActivity::class.java)
-            startActivity(logout)
-            finish()
-        }
+//        binding.btnLogout.setOnClickListener {
+//            TokenManager(this).deleteToken()
+//            val logout = Intent(this, MainActivity::class.java)
+//            startActivity(logout)
+//            finish()
+//        }
     }
 }
