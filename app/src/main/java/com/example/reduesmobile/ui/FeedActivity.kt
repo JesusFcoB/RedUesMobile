@@ -24,11 +24,13 @@ class FeedActivity : AppCompatActivity() {
     lateinit var binding: ActivityFeedBinding
     private lateinit var postAdapter: PostAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFeedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupRecyclerView()
+        setupPaging()
 
         binding.perfilboton.setOnClickListener {
             TokenManager(this).deleteToken()

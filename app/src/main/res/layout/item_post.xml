@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
     android:background="#5f0716">
 
     <androidx.cardview.widget.CardView
@@ -32,9 +34,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/perfil_boton"
-                android:tint="@color/fondoLogin"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#5f0716" />
 
             <TextView
                 android:id="@+id/txtUsuarioPost"
@@ -45,6 +47,7 @@
                 android:layout_marginTop="22dp"
                 android:fontFamily="sans-serif-black"
                 android:text="Usuario"
+                android:textColor="#5f0716"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/perfil"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -114,7 +117,9 @@
                     android:id="@+id/txtContenido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:padding="5dp"
+                    android:textSize="16dp"
                     android:text="hasiodhasidhasiohsadlihasaakujhskhadskjhdkjashkdjhaskjdhakjshdkjashkdjhaskjdhkajshdkjashkjdhaskjdhkjashdkjahskdjhaskjdhakjshdkjashkjdahskjdhaksjhdkjashdkjhkjashdfkjlashfkjhsaklfdhfskjdahsadkljfhkjsldhfkjsdhfjkhsdakljfahskjhdflkjsdhkjfhaskjlh" />
 
             </androidx.cardview.widget.CardView>
