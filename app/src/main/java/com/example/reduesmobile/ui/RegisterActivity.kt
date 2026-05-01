@@ -66,6 +66,8 @@ class RegisterActivity : AppCompatActivity() {
     private fun registrar(request: RegisterRequest) {
         binding.loadingCardRegister.visibility = View.VISIBLE
         binding.cargandoRegister.visibility = View.VISIBLE
+        bloquearUIRegister()
+
         lifecycleScope.launch {
             try {
                 val api = RetrofitInstance.Companion
@@ -95,6 +97,8 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this@RegisterActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG)
                     .show()
             } finally {
+                desbloquearUIRegister()
+
                 binding.loadingCardRegister.visibility = View.GONE
                 binding.cargandoRegister.visibility = View.GONE
             }
@@ -150,6 +154,26 @@ class RegisterActivity : AppCompatActivity() {
         if (binding.spSemestre.selectedItemPosition == 0) return "Selecciona un semestre"
 
         return null // todo bien
+    }
+
+    private fun bloquearUIRegister() {
+        binding.txtUsuario.isEnabled = false
+        binding.txtEmail.isEnabled = false
+        binding.txtPassword.isEnabled = false
+        binding.txtConfirmPassword.isEnabled = false
+        binding.spCarrera.isEnabled = false
+        binding.spSemestre.isEnabled = false
+        binding.btnRegister.isEnabled = false
+    }
+
+    private fun desbloquearUIRegister() {
+        binding.txtUsuario.isEnabled = true
+        binding.txtEmail.isEnabled = true
+        binding.txtPassword.isEnabled = true
+        binding.txtConfirmPassword.isEnabled = true
+        binding.spCarrera.isEnabled = true
+        binding.spSemestre.isEnabled = true
+        binding.btnRegister.isEnabled = true
     }
 
 
