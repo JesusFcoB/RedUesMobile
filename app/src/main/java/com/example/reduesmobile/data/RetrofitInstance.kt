@@ -12,7 +12,6 @@ class RetrofitInstance {
 
     companion object {
         const val BASE_URL = "https://redues.runasp.net/api/"
-
         fun getRetrofitInstance(context: Context): Retrofit{
             val tokenManager = TokenManager(context)
 

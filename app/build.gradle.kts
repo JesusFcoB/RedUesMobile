@@ -59,7 +59,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.cardview)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.swiperefreshlayout)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    val paging_version = "3.3.2"
+    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    testImplementation("androidx.paging:paging-common-ktx:$paging_version")
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")
 
