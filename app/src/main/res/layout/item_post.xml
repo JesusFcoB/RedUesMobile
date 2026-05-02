@@ -33,7 +33,7 @@
                 android:layout_gravity="top|left"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/perfil_boton"
+                android:src="@drawable/perfil"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="#5f0716" />
@@ -78,7 +78,7 @@
                 android:clickable="true"
                 android:contentDescription="Guardar publicación"
                 android:focusable="true"
-                android:src="@drawable/guardado_relleno"
+                android:src="@drawable/guardado"
                 app:layout_constraintEnd_toStartOf="@+id/btnLike"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +93,7 @@
                 android:clickable="true"
                 android:contentDescription="Dar like"
                 android:focusable="true"
-                android:src="@drawable/like_relleno"
+                android:src="@drawable/like"
                 app:layout_constraintEnd_toStartOf="@+id/btnComentar"
                 app:layout_constraintTop_toTopOf="parent" />
 
