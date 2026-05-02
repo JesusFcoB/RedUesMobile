@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="fondoLogin">#dee0e3</color>
     <color name="fondoLoginbtn">#ff7400</color>
+    <color name="guinda">#5f0716</color>
+    <color name="naranja_oscuro">#9a3412</color>
 </resources>

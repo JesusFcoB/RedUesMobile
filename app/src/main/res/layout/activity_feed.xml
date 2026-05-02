@@ -37,7 +37,7 @@
             android:layout_gravity="top|left"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/perfil_boton" />
+            android:src="@drawable/perfil" />
 
         <TextView
             android:id="@+id/txtUsuarioPost"
@@ -74,7 +74,7 @@
             android:contentDescription="Guardar publicación"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/guardado_relleno" />
+            android:src="@drawable/guardado" />
 
         <ImageView
             android:id="@+id/btnLike"
@@ -87,7 +87,7 @@
             android:contentDescription="Dar like"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/like_relleno" />
+            android:src="@drawable/like" />
     </androidx.cardview.widget.CardView>
 
     <SearchView
