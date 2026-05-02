@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
+
             val loginRequest: LoginRequest = LoginRequest(
                 binding.txtUsuario.text.toString(),
                 binding.txtPassword.text.toString()

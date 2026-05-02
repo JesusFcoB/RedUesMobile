@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.example.reduesmobile.data.api.PublicacionesApi
 import com.example.reduesmobile.data.auth.TokenManager
 import com.example.reduesmobile.databinding.ActivityFeedBinding
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
 class FeedActivity : AppCompatActivity() {
@@ -31,6 +33,7 @@ class FeedActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupPaging()
+        setupRefreshLayout()
 
         binding.perfilboton.setOnClickListener {
             TokenManager(this).deleteToken()
@@ -79,6 +82,35 @@ class FeedActivity : AppCompatActivity() {
                     postAdapter.submitData(pagingData)
                 }
             }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // distinctUntilChangedBy evita que el código se ejecute si el estado de refresh no ha cambiado
+                postAdapter.loadStateFlow
+                    .distinctUntilChangedBy { it.refresh }
+                    .collectLatest { loadStates ->
+
+                        // 1. Controlar la ruedita
+                        binding.swipeRefresh.isRefreshing = loadStates.refresh is LoadState.Loading
+
+                        // 2. Solo subir al inicio si el REFRESH terminó con éxito
+                        // y no es una carga de "añadir más" (append)
+                        if (loadStates.source.refresh is LoadState.NotLoading &&
+                            loadStates.append is LoadState.NotLoading) {
+
+                            binding.rvPosts.scrollToPosition(0)
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun setupRefreshLayout() {
+        val colorUes = android.graphics.Color.parseColor("#ff7400")
+        binding.swipeRefresh.setColorSchemeColors(colorUes)
+        binding.swipeRefresh.setOnRefreshListener {
+            postAdapter.refresh()
         }
     }
 }

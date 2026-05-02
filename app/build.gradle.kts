@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.swiperefreshlayout)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     val paging_version = "3.3.2"
