@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5f0716"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp"
+    tools:context=".ui.Publicacion">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarPublicacion"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#3e0410"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearPublicacion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            tools:layout_editor_absoluteX="16dp">
+
+            <ImageView
+                android:id="@+id/btnInicio"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Inicio"
+                android:focusable="true"
+                android:src="@drawable/inicio" />
+
+            <ImageView
+                android:id="@+id/btnCrearApunte"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Crear apunte"
+                android:focusable="true"
+                android:src="@drawable/crear_apunte" />
+
+            <ImageView
+                android:id="@+id/btnCrearPublicacion"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Crear publicación"
+                android:focusable="true"
+                android:src="@drawable/crear_publicacion" />
+
+            <ImageView
+                android:id="@+id/btnPerfil"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Perfil"
+                android:focusable="true"
+                android:src="@drawable/perfil_boton" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardApunte"
+        android:layout_width="382dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="70dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/etApunte"
+            android:layout_width="341dp"
+            android:layout_height="255dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/fondoLogin"
+            android:ems="10"
+            android:hint="Escribe tu publicación aquí..."
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/txtTituloApunte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Crear publicación"
+            android:textAlignment="center"
+            android:textColor="#9a3412"
+            android:textSize="30dp"
+            android:typeface="monospace" />
+
+        <Button
+            android:id="@+id/btnAgregarApunte"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="70dp"
+            android:backgroundTint="@color/naranja_oscuro"
+            android:drawableStart="@drawable/add_publicacion"
+            android:drawablePadding="8dp"
+            android:text="Publicar"
+            android:textSize="20sp"
+            app:icon="@drawable/add_publicacion"
+            app:iconSize="30dp" />
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

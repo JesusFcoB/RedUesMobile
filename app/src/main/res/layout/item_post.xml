@@ -40,22 +40,28 @@
 
             <TextView
                 android:id="@+id/txtUsuarioPost"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|left"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="sans-serif-black"
                 android:text="Usuario"
                 android:textColor="#5f0716"
-                android:textSize="20sp"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                app:layout_constraintEnd_toStartOf="@+id/btnGuardar"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/perfil"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/btnComentar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="top|right"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -69,8 +75,8 @@
 
             <ImageView
                 android:id="@+id/btnGuardar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="top|right"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
@@ -84,8 +90,8 @@
 
             <ImageView
                 android:id="@+id/btnLike"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="top|right"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
@@ -120,6 +126,11 @@
                     android:textColor="@color/black"
                     android:padding="5dp"
                     android:textSize="16dp"
+                    android:textIsSelectable="true"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:autoLink="web"
+                    android:linksClickable="true"
                     android:text="hasiodhasidhasiohsadlihasaakujhskhadskjhdkjashkdjhaskjdhakjshdkjashkdjhaskjdhkajshdkjashkjdhaskjdhkjashdkjahskdjhaskjdhakjshdkjashkjdahskjdhaksjhdkjashdkjhkjashdfkjlashfkjhsaklfdhfskjdahsadkljfhkjsldhfkjsdhfjkhsdakljfahskjhdflkjsdhkjfhaskjlh" />
 
             </androidx.cardview.widget.CardView>
