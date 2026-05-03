@@ -119,37 +119,44 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:src="@drawable/inicio"
+            android:id="@+id/btnInicio"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:clickable="true"
-            android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Inicio"/>
+            android:clickable="true"
+            android:contentDescription="Inicio"
+            android:focusable="true"
+            android:src="@drawable/inicio" />
+
         <ImageView
-            android:src="@drawable/crear_apunte"
+            android:id="@+id/btnCrearApunte"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:clickable="true"
-            android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Crear apunte"/>
+            android:clickable="true"
+            android:contentDescription="Crear apunte"
+            android:focusable="true"
+            android:src="@drawable/crear_apunte" />
+
         <ImageView
-            android:src="@drawable/crear_publicacion"
+            android:id="@+id/btnCrearPublicacion"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:clickable="true"
-            android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Crear publicación"/>
+            android:clickable="true"
+            android:contentDescription="Crear publicación"
+            android:focusable="true"
+            android:src="@drawable/crear_publicacion" />
+
         <ImageView
-            android:src="@drawable/perfil_boton"
+            android:id="@+id/btnPerfil"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:clickable="true"
-            android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Perfil" />
+            android:clickable="true"
+            android:contentDescription="Perfil"
+            android:focusable="true"
+            android:src="@drawable/perfil_boton" />
 
     </LinearLayout>
 
