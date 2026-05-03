@@ -28,12 +28,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            val loginRequest: LoginRequest = LoginRequest(
+            val error = validarLogin()
+            if (error != null) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val loginRequest = LoginRequest(
                 binding.txtUsuario.text.toString(),
                 binding.txtPassword.text.toString()
             )
+
             iniciarSesion(loginRequest)
         }
+
 
         binding.txtRegister.setOnClickListener {
             val register = Intent(this, RegisterActivity::class.java)
@@ -66,7 +74,13 @@ class MainActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    Toast.makeText(this@MainActivity, "Error de credenciales", Toast.LENGTH_LONG).show()
+                    val errorBody = response.errorBody()?.string()
+
+                    Toast.makeText(
+                        this@MainActivity,
+                        errorBody ?: "Usuario o contraseña incorrectos",
+                        Toast.LENGTH_LONG
+                    ).show()
                     //TODO: personalizar error de inicio de sesion fallido
                 }
             } catch (e: Exception) {
@@ -96,5 +110,17 @@ class MainActivity : AppCompatActivity() {
         binding.btnLogin.isEnabled = true
         binding.txtRegister.isEnabled = true
     }
+
+    private fun validarLogin(): String? {
+        val usuario = binding.txtUsuario.text.toString()
+        val password = binding.txtPassword.text.toString()
+
+        if (usuario.isEmpty()) return "Ingresa tu usuario"
+        if (password.isEmpty()) return "Ingresa tu contraseña"
+        if (password.length < 6) return "Contraseña mínima de 6 caracteres"
+
+        return null
+    }
+
 
 }
