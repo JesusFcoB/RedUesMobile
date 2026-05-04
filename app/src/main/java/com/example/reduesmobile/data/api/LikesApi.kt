@@ -5,6 +5,6 @@ import retrofit2.http.Path
 
 interface LikesApi {
 
-    @POST("api/v1/publicaciones/{idPublicacion}/likes")
+    @POST("v1/publicaciones/{idPublicacion}/likes")
     suspend fun toggleLike(@Path("idPublicacion") idPublicacion: Int)
 }

@@ -6,9 +6,9 @@ import retrofit2.http.Path
 
 interface SeguidoresApi {
 
-    @POST("api/v1/usuarios/{idUsuario}/seguidores")
+    @POST("v1/usuarios/{idUsuario}/seguidores")
     suspend fun seguir(@Path("idUsuario") idUsuario: Int)
 
-    @DELETE("api/v1/usuarios/{idUsuario}/seguidores")
+    @DELETE("v1/usuarios/{idUsuario}/seguidores")
     suspend fun dejarDeSeguir(@Path("idUsuario") idUsuario: Int)
 }

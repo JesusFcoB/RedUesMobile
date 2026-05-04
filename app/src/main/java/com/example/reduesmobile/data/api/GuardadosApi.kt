@@ -8,11 +8,11 @@ import retrofit2.http.Query
 
 interface GuardadosApi {
 
-    @GET("v1/publicaciones/guardados")
+    @GET("publicaciones/guardados")
     suspend fun obtenerGuardados(@Query("page") page: Int,
                                  @Query("pageSize") pageSize: Int
     ): List<PublicacionResponse>
 
-    @POST("api/v1/publicaciones/{idPublicacion}/guardados")
+    @POST("v1/publicaciones/{idPublicacion}/guardados")
     suspend fun toggleGuardado(@Path("idPublicacion") idPublicacion: Int)
 }

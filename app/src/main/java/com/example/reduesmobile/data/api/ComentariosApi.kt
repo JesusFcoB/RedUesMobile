@@ -8,15 +8,15 @@ import retrofit2.http.Path
 
 interface ComentariosApi {
 
-    @POST("api/v1/publicaciones/{idPublicacion}/comentarios")
+    @POST("v1/publicaciones/{idPublicacion}/comentarios")
     suspend fun comentar(@Path("idPublicacion") idPublicacion: Int,
                          @Body comentarioRequest: ComentarioRequest
     )
 
-    @POST("api/v1/publicaciones/comentarios/{idComentario}")
+    @POST("v1/publicaciones/comentarios/{idComentario}")
     suspend fun editarComentario(@Path("idComentario") idComentario: Int,
                                  @Body comentarioRequest: ComentarioRequest)
 
-    @DELETE("api/v1/publicaciones/comentarios/{idComentario}")
+    @DELETE("v1/publicaciones/comentarios/{idComentario}")
     suspend fun eliminarComentario(@Path("idComentario") idComentario: Int)
 }

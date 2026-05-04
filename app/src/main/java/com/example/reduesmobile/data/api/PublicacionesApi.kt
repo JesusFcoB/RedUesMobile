@@ -24,15 +24,15 @@ interface PublicacionesApi {
                                                @Query("pageSize") pageSize: Int
     ): List<PublicacionResponse>
 
-    @POST("api/v1/publicaciones")
+    @POST("v1/publicaciones")
     suspend fun crearPublicacion(@Body publicacionRequest: PublicacionRequest)
 
-    @POST("api/v1/publicaciones/apuntes")
+    @POST("v1/publicaciones/apuntes")
     suspend fun crearApunte(@Body publicacionRequest: PublicacionRequest)
 
-    @PUT("api/v1/publicaciones")
+    @PUT("v1/publicaciones")
     suspend fun editarPublicacion(@Body publicacionRequest: PublicacionRequest)
 
-    @DELETE("api/v1/publicaciones/{id}")
+    @DELETE("v1/publicaciones/{id}")
     suspend fun eliminarPulicacion(@Path("id") idpublicacion: Int)
 }
