@@ -9,6 +9,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import com.example.reduesmobile.CrearPublicacionRequest
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.PUT
 
 
 data class LikeResponse(val likes: Int, val dioLike: Boolean)
@@ -36,9 +38,29 @@ interface PublicacionesApi {
         @Body request: CrearPublicacionRequest
     ): Response<Unit>
 
-    @GET("v1/usuarios/{id}/publicaciones")
+    @GET("v1/publicaciones/usuarios/{id}")
     suspend fun getPublicacionesUsuario(
         @Path("id") id: Int,
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): Response<List<PublicacionDto>>
+
+    // Editar publicación
+    @PUT("v1/publicaciones/{id}")
+    suspend fun editarPublicacion(
+        @Path("id") id: Int,
+        @Body request: CrearPublicacionRequest
+    ): Response<Unit>
+
+    // Eliminar publicación
+    @DELETE("v1/publicaciones/{id}")
+    suspend fun eliminarPublicacion(
+        @Path("id") id: Int
+    ): Response<Unit>
+
+    // Guardados paginados
+    @GET("v1/publicaciones/guardados")
+    suspend fun getGuardados(
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): Response<List<PublicacionDto>>

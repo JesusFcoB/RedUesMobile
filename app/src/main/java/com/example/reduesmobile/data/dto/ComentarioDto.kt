@@ -1,12 +1,12 @@
 package com.example.reduesmobile.data.dto
 
-import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class ComentarioDto(
-    @SerializedName("comentario_id") val id: Int,
-    @SerializedName("publicacion_id") val publicacionId: Int,
-    @SerializedName("usuario_id") val usuarioId: Int,
+    val comentario_id: Int,
+    val publicacion_id: Int,
+    val usuario_id: Int,
     val usuario: String,
     val texto: String,
-    @SerializedName("fecha_comentario") val fechaComentario: String
-)
+    val fecha_comentario: String
+) : Serializable
