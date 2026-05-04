@@ -1,165 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5f0716"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="10dp"
-    tools:context=".ui.FeedActivity">
+    android:background="#5f0716">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/Post"
-        android:layout_width="382dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="58dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buscar">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/contenido"
-            android:layout_width="337dp"
-            android:layout_height="122dp"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/fondoLogin" />
-
-        <ImageView
-            android:id="@+id/perfil"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/perfil" />
-
-        <TextView
-            android:id="@+id/txtUsuarioPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="61dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-black"
-            android:text="Usuario"
-            android:textSize="25sp" />
-
-        <ImageView
-            android:id="@+id/btnComentar"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:clickable="true"
-            android:contentDescription="Comentar"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/comentario" />
-
-        <ImageView
-            android:id="@+id/btnGuardar"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="58dp"
-            android:clickable="true"
-            android:contentDescription="Guardar publicación"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/guardado" />
-
-        <ImageView
-            android:id="@+id/btnLike"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="106dp"
-            android:clickable="true"
-            android:contentDescription="Dar like"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/like" />
-    </androidx.cardview.widget.CardView>
-
+    <!-- Barra superior -->
     <SearchView
         android:id="@+id/buscar"
-        android:layout_width="382dp"
+        android:layout_width="0dp"
         android:layout_height="51dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="15dp"
         android:background="#3e0410"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Lista de publicaciones -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerFeed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buscar"
+        app:layout_constraintBottom_toTopOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Loading -->
+    <ProgressBar
+        android:id="@+id/progressFeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateTint="#ff8c00"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerFeed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/toolbar" />
+
+    <!-- Toolbar inferior -->
     <androidx.appcompat.widget.Toolbar
-    android:id="@+id/toolbar"
-    android:layout_width="0dp"
-    android:layout_height="?attr/actionBarSize"
-    android:background="#3e0410"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#3e0410"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:weightSum="4"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/btnInicio"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Inicio"
-            android:focusable="true"
-            android:src="@drawable/inicio" />
+            <ImageView
+                android:id="@+id/btnInicio"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/inicio" />
 
-        <ImageView
-            android:id="@+id/btnCrearApunte"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Crear apunte"
-            android:focusable="true"
-            android:src="@drawable/crear_apunte" />
+            <ImageView
+                android:id="@+id/btnCrearApunte"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/crear_apunte" />
 
-        <ImageView
-            android:id="@+id/btnCrearPublicacion"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Crear publicación"
-            android:focusable="true"
-            android:src="@drawable/crear_publicacion" />
+            <ImageView
+                android:id="@+id/btnCrearPublicacion"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/crear_publicacion" />
 
-        <ImageView
-            android:id="@+id/btnPerfil"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Perfil"
-            android:focusable="true"
-            android:src="@drawable/perfil_boton" />
+            <ImageView
+                android:id="@+id/btnPerfil"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/perfil_boton" />
 
-    </LinearLayout>
-
-</androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

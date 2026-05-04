@@ -58,4 +58,37 @@ class TokenManager(context: Context) {
         }
 
     }
+
+    fun getUserId(): Int {
+        val token = getToken() ?: return -1
+        return try {
+            val payload = token.split(".")[1]
+            val decoded = android.util.Base64.decode(
+                payload, android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING
+            )
+            val json = String(decoded)
+            // El ID viene en el campo "sub"
+            val regex = Regex(""""sub"\s*:\s*"?(\d+)"?""")
+            val match = regex.find(json)
+            match?.groupValues?.get(1)?.toInt() ?: -1
+        } catch (e: Exception) {
+            -1
+        }
+    }
+
+    fun getUserName(): String? {
+        val token = getToken() ?: return null
+        return try {
+            val payload = token.split(".")[1]
+            val decoded = android.util.Base64.decode(
+                payload, android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING
+            )
+            val json = String(decoded)
+            val regex = Regex(""""unique_name"\s*:\s*"([^"]+)"""")
+            val match = regex.find(json)
+            match?.groupValues?.get(1)
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
