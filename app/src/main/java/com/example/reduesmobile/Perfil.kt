@@ -16,6 +16,7 @@ import com.example.reduesmobile.data.dto.PublicacionDto
 import com.example.reduesmobile.databinding.ActivityPerfilBinding
 import com.example.reduesmobile.ui.ComentariosActivity
 import com.example.reduesmobile.ui.FeedActivity
+import com.example.reduesmobile.ui.GuardadosActivity
 import com.example.reduesmobile.ui.MainActivity
 import com.example.reduesmobile.ui.PostAdapter
 import com.example.reduesmobile.ui.Publicacion
@@ -47,7 +48,7 @@ class Perfil : AppCompatActivity() {
         }
 
         binding.btnPublicacionesGuardadas.setOnClickListener {
-            Toast.makeText(this, "Guardados próximamente", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, GuardadosActivity::class.java))
         }
     }
 
@@ -62,7 +63,8 @@ class Perfil : AppCompatActivity() {
             onComentar = { post ->
                 val intent = Intent(this, ComentariosActivity::class.java)
                 intent.putExtra("publicacionId", post.id)
-                intent.putExtra("comentarios", ArrayList<ComentarioDto>(post.comentarios))
+                // DESPUÉS
+                intent.putParcelableArrayListExtra("comentarios", ArrayList(post.comentarios))
                 startActivity(intent)
             },
             onEditar = { post -> mostrarDialogoEditar(post) },

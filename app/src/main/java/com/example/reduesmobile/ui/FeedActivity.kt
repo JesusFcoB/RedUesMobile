@@ -51,7 +51,8 @@ class FeedActivity : AppCompatActivity() {
             onComentar = { post ->
                 val intent = Intent(this, ComentariosActivity::class.java)
                 intent.putExtra("publicacionId", post.id)
-                intent.putExtra("comentarios", ArrayList<ComentarioDto>(post.comentarios))
+                // DESPUÉS
+                intent.putParcelableArrayListExtra("comentarios", ArrayList(post.comentarios))
                 startActivity(intent)
             },
             onEditar = { post -> mostrarDialogoEditar(post) },

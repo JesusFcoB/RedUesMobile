@@ -43,4 +43,15 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/btnOpcionesComentario"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/opciones"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:contentDescription="Opciones" />
+
 </LinearLayout>

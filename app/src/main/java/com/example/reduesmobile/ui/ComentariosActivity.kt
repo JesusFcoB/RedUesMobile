@@ -1,12 +1,15 @@
 package com.example.reduesmobile.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.ComentariosApi
+import com.example.reduesmobile.data.auth.TokenManager
 import com.example.reduesmobile.data.dto.ComentarioDto
 import com.example.reduesmobile.data.dto.ComentariosRequestDto
 import com.example.reduesmobile.databinding.ActivityComentariosBinding
@@ -23,9 +26,9 @@ class ComentariosActivity : AppCompatActivity() {
         binding = ActivityComentariosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Recibir datos de la publicación
         publicacionId = intent.getIntExtra("publicacionId", -1)
-        val comentariosIniciales = intent.getSerializableExtra("comentarios") as? ArrayList<ComentarioDto>
+        // DESPUÉS
+        val comentariosIniciales = intent.getParcelableArrayListExtra<ComentarioDto>("comentarios")
         comentariosIniciales?.let { comentarios.addAll(it) }
 
         configurarRecycler()
@@ -40,7 +43,14 @@ class ComentariosActivity : AppCompatActivity() {
     }
 
     private fun configurarRecycler() {
-        adapter = ComentariosAdapter(comentarios)
+        val usuarioActualId = TokenManager(this).getUserId()
+
+        adapter = ComentariosAdapter(
+            comentarios,
+            currentUserId = usuarioActualId,
+            onEditar = { comentario -> mostrarDialogoEditar(comentario) },
+            onEliminar = { comentario -> eliminarComentario(comentario) }
+        )
         binding.recyclerComentarios.layoutManager = LinearLayoutManager(this)
         binding.recyclerComentarios.adapter = adapter
     }
@@ -71,5 +81,70 @@ class ComentariosActivity : AppCompatActivity() {
                 binding.btnEnviar.isEnabled = true
             }
         }
+    }
+
+    private fun mostrarDialogoEditar(comentario: ComentarioDto) {
+        val input = EditText(this)
+        input.setText(comentario.texto)
+
+        AlertDialog.Builder(this)
+            .setTitle("Editar comentario")
+            .setView(input)
+            .setPositiveButton("Guardar") { _, _ ->
+                val nuevoTexto = input.text.toString().trim()
+                if (nuevoTexto.isNotEmpty()) {
+                    editarComentario(comentario, nuevoTexto)
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun editarComentario(comentario: ComentarioDto, nuevoTexto: String) {
+        lifecycleScope.launch {
+            try {
+                val api = RetrofitInstance.getRetrofitInstance(this@ComentariosActivity)
+                    .create(ComentariosApi::class.java)
+
+                val response = api.editar(comentario.comentario_id, ComentariosRequestDto(nuevoTexto))
+
+                if (response.isSuccessful) {
+                    val actualizado = response.body()
+                    actualizado?.let { adapter.actualizar(it) }
+                    Toast.makeText(this@ComentariosActivity, "Comentario editado", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@ComentariosActivity, "Error al editar", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@ComentariosActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun eliminarComentario(comentario: ComentarioDto) {
+        AlertDialog.Builder(this)
+            .setTitle("Eliminar comentario")
+            .setMessage("¿Estás seguro de eliminar este comentario?")
+            .setPositiveButton("Eliminar") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        val api = RetrofitInstance.getRetrofitInstance(this@ComentariosActivity)
+                            .create(ComentariosApi::class.java)
+
+                        val response = api.eliminar(comentario.comentario_id)
+
+                        if (response.isSuccessful) {
+                            adapter.eliminar(comentario.comentario_id)
+                            Toast.makeText(this@ComentariosActivity, "Comentario eliminado", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@ComentariosActivity, "Error al eliminar", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(this@ComentariosActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 }

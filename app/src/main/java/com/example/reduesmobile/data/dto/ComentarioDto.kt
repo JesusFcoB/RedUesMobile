@@ -1,7 +1,9 @@
 package com.example.reduesmobile.data.dto
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ComentarioDto(
     val comentario_id: Int,
     val publicacion_id: Int,
@@ -9,4 +11,4 @@ data class ComentarioDto(
     val usuario: String,
     val texto: String,
     val fecha_comentario: String
-) : Serializable
+) : Parcelable
