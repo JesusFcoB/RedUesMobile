@@ -1,8 +1,11 @@
 package com.example.reduesmobile.data.api
 
+import com.example.reduesmobile.data.dto.EditarPerfilRequest
 import com.example.reduesmobile.data.dto.PerfilDto
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -15,4 +18,9 @@ interface UsuariosApi {
         @Query("usuario") usuario: String,
         @Query("filtro") filtro: String = "relevancia"
     ): Response<List<PerfilDto>>
+
+    @PUT("v1/usuarios/perfiles")
+    suspend fun editarPerfil(
+        @Body request: EditarPerfilRequest
+    ): Response<Unit>
 }

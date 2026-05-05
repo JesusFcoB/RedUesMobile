@@ -45,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation("jp.wasabeef:richeditor-android:2.0.0")
     // Usa los alias del catálogo (libs) que ya vienen por defecto en proyectos nuevos
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

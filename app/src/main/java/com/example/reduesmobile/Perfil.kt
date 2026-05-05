@@ -3,18 +3,21 @@ package com.example.reduesmobile
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.PublicacionesApi
+import com.example.reduesmobile.data.api.SeguidoresApi
 import com.example.reduesmobile.data.api.UsuariosApi
 import com.example.reduesmobile.data.auth.TokenManager
 import com.example.reduesmobile.data.dto.ComentarioDto
 import com.example.reduesmobile.data.dto.PublicacionDto
 import com.example.reduesmobile.databinding.ActivityPerfilBinding
 import com.example.reduesmobile.ui.ComentariosActivity
+import com.example.reduesmobile.ui.EditarPerfilActivity
 import com.example.reduesmobile.ui.FeedActivity
 import com.example.reduesmobile.ui.GuardadosActivity
 import com.example.reduesmobile.ui.MainActivity
@@ -26,11 +29,20 @@ class Perfil : AppCompatActivity() {
     lateinit var binding: ActivityPerfilBinding
     private lateinit var adapter: PostAdapter
     private val posts = mutableListOf<PublicacionDto>()
+    private var usuarioActualId = -1
+    private var perfilId = -1
+    private var esPropioPerfil = false
+    private var loSigo = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        usuarioActualId = TokenManager(this).getUserId()
+        // Si se pasa un ID externo lo usamos, si no cargamos el propio
+        perfilId = intent.getIntExtra("usuarioId", usuarioActualId)
+        esPropioPerfil = perfilId == usuarioActualId
 
         configurarRecycler()
         configurarNavegacion()
@@ -44,7 +56,12 @@ class Perfil : AppCompatActivity() {
         }
 
         binding.btnEditarPerfil.setOnClickListener {
-            Toast.makeText(this, "Editar perfil próximamente", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, EditarPerfilActivity::class.java)
+            intent.putExtra("bio", binding.txtUsuarioPerfil.text.toString())
+            intent.putExtra("carrera", binding.txtCarrera.text.toString())
+            intent.putExtra("semestre", binding.txtSemestre.text.toString()
+                .replace("• ", "").replace(" Sem.", "").toIntOrNull() ?: 0)
+            startActivityForResult(intent, 100)
         }
 
         binding.btnPublicacionesGuardadas.setOnClickListener {
@@ -52,9 +69,17 @@ class Perfil : AppCompatActivity() {
         }
     }
 
+    // Agregar este metodo
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            // Recargar perfil con datos actualizados
+            posts.clear()
+            adapter.notifyDataSetChanged()
+            cargarPerfil()
+        }
+    }
     private fun configurarRecycler() {
-        val usuarioActualId = TokenManager(this).getUserId()
-
         adapter = PostAdapter(
             posts,
             currentUserId = usuarioActualId,
@@ -63,14 +88,12 @@ class Perfil : AppCompatActivity() {
             onComentar = { post ->
                 val intent = Intent(this, ComentariosActivity::class.java)
                 intent.putExtra("publicacionId", post.id)
-                // DESPUÉS
                 intent.putParcelableArrayListExtra("comentarios", ArrayList(post.comentarios))
                 startActivity(intent)
             },
             onEditar = { post -> mostrarDialogoEditar(post) },
             onEliminar = { post -> eliminarPost(post) }
         )
-
         binding.recyclerPerfil.layoutManager = LinearLayoutManager(this)
         binding.recyclerPerfil.adapter = adapter
     }
@@ -78,18 +101,12 @@ class Perfil : AppCompatActivity() {
     private fun cargarPerfil() {
         lifecycleScope.launch {
             try {
-                val usuarioId = TokenManager(this@Perfil).getUserId()
-                if (usuarioId == -1) {
-                    Toast.makeText(this@Perfil, "Sesión inválida", Toast.LENGTH_SHORT).show()
-                    return@launch
-                }
-
                 val usuariosApi = RetrofitInstance.getRetrofitInstance(this@Perfil)
                     .create(UsuariosApi::class.java)
                 val publicacionesApi = RetrofitInstance.getRetrofitInstance(this@Perfil)
                     .create(PublicacionesApi::class.java)
 
-                val perfilResponse = usuariosApi.getPerfil(usuarioId)
+                val perfilResponse = usuariosApi.getPerfil(perfilId)
                 if (perfilResponse.isSuccessful) {
                     val perfil = perfilResponse.body()
                     perfil?.let {
@@ -99,10 +116,29 @@ class Perfil : AppCompatActivity() {
                         binding.contPublicaciones.text = it.cantidadPublicaciones.toString()
                         binding.contSeguidores.text = it.cantidadSeguidores.toString()
                         binding.contSeguidos.text = it.cantidadSiguiendo.toString()
+                        loSigo = it.loSigo
                     }
                 }
 
-                val pubResponse = publicacionesApi.getPublicacionesUsuario(usuarioId, 1, 10)
+                // Mostrar/ocultar botones según si es propio perfil
+                if (esPropioPerfil) {
+                    binding.btnEditarPerfil.visibility = View.VISIBLE
+                    binding.btnPublicacionesGuardadas.visibility = View.VISIBLE
+                    binding.btnCerrarSesion.visibility = View.VISIBLE
+                    binding.btnSeguir.visibility = View.GONE
+                } else {
+                    binding.btnEditarPerfil.visibility = View.GONE
+                    binding.btnPublicacionesGuardadas.visibility = View.GONE
+                    binding.btnCerrarSesion.visibility = View.GONE
+                    binding.btnSeguir.visibility = View.VISIBLE
+                    actualizarBotonSeguir()
+
+                    binding.btnSeguir.setOnClickListener {
+                        toggleSeguir()
+                    }
+                }
+
+                val pubResponse = publicacionesApi.getPublicacionesUsuario(perfilId, 1, 10)
                 if (pubResponse.isSuccessful) {
                     val nuevas = pubResponse.body() ?: emptyList()
                     adapter.agregarPosts(nuevas)
@@ -114,18 +150,49 @@ class Perfil : AppCompatActivity() {
         }
     }
 
+    private fun actualizarBotonSeguir() {
+        binding.btnSeguir.text = if (loSigo) "Dejar de seguir" else "Seguir"
+        binding.btnSeguir.backgroundTintList = android.content.res.ColorStateList.valueOf(
+            if (loSigo) android.graphics.Color.GRAY
+            else android.graphics.Color.parseColor("#ff8c00")
+        )
+    }
+
+    private fun toggleSeguir() {
+        lifecycleScope.launch {
+            try {
+                val api = RetrofitInstance.getRetrofitInstance(this@Perfil)
+                    .create(SeguidoresApi::class.java)
+
+                val response = if (loSigo) {
+                    api.dejarDeSeguir(perfilId)
+                } else {
+                    api.seguir(perfilId)
+                }
+
+                if (response.isSuccessful) {
+                    val resultado = response.body()
+                    loSigo = resultado?.isFollowing ?: !loSigo
+                    binding.contSeguidores.text = resultado?.seguidoresCount.toString()
+                    actualizarBotonSeguir()
+                } else {
+                    Toast.makeText(this@Perfil, "Error al seguir", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@Perfil, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun mostrarDialogoEditar(post: PublicacionDto) {
         val input = android.widget.EditText(this)
         input.setText(post.contenido)
-
         AlertDialog.Builder(this)
             .setTitle("Editar publicación")
             .setView(input)
             .setPositiveButton("Guardar") { _, _ ->
                 val nuevoContenido = input.text.toString().trim()
-                if (nuevoContenido.isNotEmpty()) {
-                    editarPost(post, nuevoContenido)
-                }
+                if (nuevoContenido.isNotEmpty()) editarPost(post, nuevoContenido)
             }
             .setNegativeButton("Cancelar", null)
             .show()
@@ -134,19 +201,12 @@ class Perfil : AppCompatActivity() {
     private fun editarPost(post: PublicacionDto, nuevoContenido: String) {
         lifecycleScope.launch {
             try {
-                val usuarioId = TokenManager(this@Perfil).getUserId()
                 val api = RetrofitInstance.getRetrofitInstance(this@Perfil)
                     .create(PublicacionesApi::class.java)
-
                 val response = api.editarPublicacion(
                     post.id,
-                    CrearPublicacionRequest(
-                        contenido = nuevoContenido,
-                        tipo = post.tipo,
-                        autorId = usuarioId
-                    )
+                    CrearPublicacionRequest(contenido = nuevoContenido, tipo = post.tipo, autorId = usuarioActualId)
                 )
-
                 if (response.isSuccessful) {
                     val index = posts.indexOfFirst { it.id == post.id }
                     if (index != -1) {
@@ -166,15 +226,13 @@ class Perfil : AppCompatActivity() {
     private fun eliminarPost(post: PublicacionDto) {
         AlertDialog.Builder(this)
             .setTitle("Eliminar publicación")
-            .setMessage("¿Estás seguro de eliminar esta publicación?")
+            .setMessage("¿Estás seguro?")
             .setPositiveButton("Eliminar") { _, _ ->
                 lifecycleScope.launch {
                     try {
                         val api = RetrofitInstance.getRetrofitInstance(this@Perfil)
                             .create(PublicacionesApi::class.java)
-
                         val response = api.eliminarPublicacion(post.id)
-
                         if (response.isSuccessful) {
                             adapter.eliminarPost(post.id)
                             Toast.makeText(this@Perfil, "Publicación eliminada", Toast.LENGTH_SHORT).show()
@@ -250,8 +308,6 @@ class Perfil : AppCompatActivity() {
             startActivity(Intent(this, Publicacion::class.java))
             finish()
         }
-        binding.btnPerfil.setOnClickListener {
-            // Ya estamos aquí
-        }
+        binding.btnPerfil.setOnClickListener { }
     }
 }

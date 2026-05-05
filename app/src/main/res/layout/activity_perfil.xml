@@ -209,6 +209,16 @@
                     android:text="Guardadas"
                     android:textSize="12sp" />
 
+                <Button
+                    android:id="@+id/btnSeguir"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/naranja_oscuro"
+                    android:text="Seguir"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -26,7 +26,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/inicio"
+            android:src="@drawable/retroceder"
             android:contentDescription="Volver" />
 
         <TextView

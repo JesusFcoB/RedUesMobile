@@ -23,6 +23,10 @@ interface PublicacionesApi {
         @Query("pageSize") pageSize: Int
     ): Response<List<PublicacionDto>>
 
+    @POST("v1/publicaciones/apuntes")
+    suspend fun crearApunte(
+        @Body request: CrearPublicacionRequest
+    ): Response<Unit>
     @POST("v1/publicaciones/{id}/likes")
     suspend fun toggleLike(
         @Path("id") id: Int

@@ -1,6 +1,7 @@
 package com.example.reduesmobile.ui
 
 import android.app.AlertDialog
+import android.widget.SearchView
 import com.example.reduesmobile.CrearPublicacionRequest
 import com.example.reduesmobile.data.dto.ComentarioDto
 import android.content.Intent
@@ -37,6 +38,17 @@ class FeedActivity : AppCompatActivity() {
 
         configurarRecycler()
         configurarNavegacion()
+        binding.buscar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()) {
+                    val intent = Intent(this@FeedActivity, BusquedaActivity::class.java)
+                    intent.putExtra("query", query)
+                    startActivity(intent)
+                }
+                return true
+            }
+            override fun onQueryTextChange(newText: String?) = false
+        })
         cargarPublicaciones()
     }
 
