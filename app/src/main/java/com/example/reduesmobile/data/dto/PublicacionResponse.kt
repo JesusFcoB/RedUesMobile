@@ -15,8 +15,8 @@ data class PublicacionResponse(
     @SerializedName("fecha_creacion")
     val fechaCreacion: String,
     val comentarios: List<ComentarioResponse> = emptyList(),
-    val cantidadLikes: Int,
-    val yaDioLike: Boolean,
-    val cantidadGuardados: Int,
-    val yaGuardo: Boolean
+    var cantidadLikes: Int,
+    var yaDioLike: Boolean,
+    var cantidadGuardados: Int,
+    var yaGuardo: Boolean
 )

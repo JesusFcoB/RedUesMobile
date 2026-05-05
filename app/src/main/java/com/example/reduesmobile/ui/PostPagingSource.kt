@@ -16,12 +16,19 @@ class PostPagingSource(
             // Llamada a la API
             val response = apiService.obtenerPublicaciones(position,10)
 
-            LoadResult.Page(
-                data = response,
-                prevKey = if (position == 1) null else position - 1,
-                // Si la respuesta está vacía, no hay más páginas (null)
-                nextKey = if (response.isEmpty()) null else position + 1
-            )
+            if (response.isSuccessful) {
+                val posts = response.body() ?: emptyList()
+
+                LoadResult.Page(
+                    data = posts,
+                    prevKey = if (position == 1) null else position - 1,
+                    // Si la respuesta está vacía, no hay más páginas (null)
+                    nextKey = if (posts.isEmpty()) null else position + 1
+                )
+            } else {
+                LoadResult.Error(Exception("Error en el servidor: ${response.code()}"))
+            }
+
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

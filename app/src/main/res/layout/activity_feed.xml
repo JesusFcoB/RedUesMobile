@@ -81,15 +81,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Crear publicación"/>
-
-        <ImageView
-            android:id="@+id/perfilboton"
-            android:src="@drawable/perfil_boton"
-            android:clickable="true"
             android:contentDescription="Crear publicación"
-            android:focusable="true"
-            android:src="@drawable/crear_publicacion" />
+            android:src="@drawable/crear_publicacion"/>
 
         <ImageView
             android:id="@+id/btnPerfil"

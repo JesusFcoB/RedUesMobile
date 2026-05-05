@@ -2,7 +2,9 @@ package com.example.reduesmobile.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -15,14 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reduesmobile.R
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.AuthApi
+import com.example.reduesmobile.data.api.GuardadosApi
+import com.example.reduesmobile.data.api.LikesApi
 import com.example.reduesmobile.data.api.PublicacionesApi
 import com.example.reduesmobile.data.auth.TokenManager
+import com.example.reduesmobile.data.dto.LoginRequest
+import com.example.reduesmobile.data.dto.PublicacionResponse
 import com.example.reduesmobile.databinding.ActivityFeedBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
-class FeedActivity : AppCompatActivity() {
+class FeedActivity : AppCompatActivity(), OnPostActionListener {
     lateinit var binding: ActivityFeedBinding
     private lateinit var postAdapter: PostAdapter
 
@@ -35,7 +41,7 @@ class FeedActivity : AppCompatActivity() {
         setupPaging()
         setupRefreshLayout()
 
-        binding.perfilboton.setOnClickListener {
+        binding.btnPerfil.setOnClickListener {
             TokenManager(this).deleteToken()
             val logout = Intent(this, MainActivity::class.java)
             startActivity(logout)
@@ -51,7 +57,7 @@ class FeedActivity : AppCompatActivity() {
 
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter()
+        postAdapter = PostAdapter(this)
 
         // Usamos binding para acceder al RecyclerView de tu activity_feed.xml
         binding.rvPosts.apply {
@@ -112,5 +118,91 @@ class FeedActivity : AppCompatActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             postAdapter.refresh()
         }
+    }
+
+    override fun onUserNameClick(post: PublicacionResponse?, position: Int) {
+        TODO("Abrir el perfil del usuario")
+    }
+
+    override fun onLikeClick(post: PublicacionResponse?, position: Int) {
+        if (post != null) {
+            val holder = binding.rvPosts.findViewHolderForAdapterPosition(position) as? PostAdapter.PostViewHolder
+            holder?.btnLike?.isEnabled = false
+
+            post.yaDioLike = !post.yaDioLike
+            binding.rvPosts.postDelayed({
+                postAdapter.notifyItemChanged(position)
+            }, 100)
+
+                lifecycleScope.launch {
+                    try {
+                        val api = RetrofitInstance.Companion
+                            .getRetrofitInstance(this@FeedActivity)
+                            .create(LikesApi::class.java)
+                        val response = api.toggleLike(post.idPublicacion)
+
+                        if (!response.isSuccessful) {
+                            post.yaDioLike = !post.yaDioLike
+                            postAdapter.notifyItemChanged(position)
+
+                            Toast.makeText(this@FeedActivity, "Error al procesar like", Toast.LENGTH_LONG).show()
+                        }
+
+
+                    } catch (e: Exception) {
+                        post.yaDioLike = !post.yaDioLike
+                        postAdapter.notifyItemChanged(position)
+
+                        Toast.makeText(this@FeedActivity, "Error al procesar like", Toast.LENGTH_LONG).show()
+                    } finally {
+                        binding.rvPosts.postDelayed({
+                            holder?.btnLike?.isEnabled = true
+                        }, 500)
+                    }
+                }
+        }
+    }
+
+    override fun onSaveClick(post: PublicacionResponse?, position: Int) {
+        if (post != null) {
+            val holder = binding.rvPosts.findViewHolderForAdapterPosition(position) as? PostAdapter.PostViewHolder
+            holder?.btnGuardar?.isEnabled = false
+
+            post.yaGuardo = !post.yaGuardo
+            binding.rvPosts.postDelayed({
+                postAdapter.notifyItemChanged(position)
+            }, 100)
+
+            lifecycleScope.launch {
+                try {
+                    val api = RetrofitInstance.Companion
+                        .getRetrofitInstance(this@FeedActivity)
+                        .create(GuardadosApi::class.java)
+                    val response = api.toggleGuardado(post.idPublicacion)
+
+                    if (!response.isSuccessful) {
+                        post.yaGuardo = !post.yaGuardo
+                        postAdapter.notifyItemChanged(position)
+
+                        Toast.makeText(this@FeedActivity, "Error al procesar guardado", Toast.LENGTH_LONG).show()
+                    }
+
+
+                } catch (e: Exception) {
+                    post.yaGuardo = !post.yaGuardo
+                    postAdapter.notifyItemChanged(position)
+
+                    Toast.makeText(this@FeedActivity, "Error al procesar guardado", Toast.LENGTH_LONG).show()
+                } finally {
+                    binding.rvPosts.postDelayed({
+                        holder?.btnGuardar?.isEnabled = true
+                    }, 500)
+                }
+            }
+        }
+    }
+
+    override fun onCommentClick(post: PublicacionResponse?, position: Int) {
+        TODO("Abrir la publicacion completa")
     }
 }
