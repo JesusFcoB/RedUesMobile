@@ -1,11 +1,13 @@
 package com.example.reduesmobile.ui
 
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.view.animation.OvershootInterpolator
+import androidx.core.text.HtmlCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +27,13 @@ class PostAdapter(private val listener: OnPostActionListener):
 
         item?.let {
             holder.usuario.text = it.autor
-            holder.contenido.text = it.contenido
+
+            if(it.tipo == "Apunte") {
+                holder.contenido.text = HtmlCompat.fromHtml(it.contenido, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                holder.contenido.movementMethod = LinkMovementMethod.getInstance()
+            } else {
+                holder.contenido.text = it.contenido
+            }
 
             val likeIcon = if (item.yaDioLike) R.drawable.like_relleno else R.drawable.like
             val savedIcon = if (item.yaGuardo) R.drawable.guardado_relleno else R.drawable.guardado

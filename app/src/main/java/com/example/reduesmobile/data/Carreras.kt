@@ -8,15 +8,15 @@ object Carreras {
 
     val listaCarreras = listOf(
         // Ingenierías
-        CarreraDto("Ingenieria Ambiental", "IA", 8),
-        CarreraDto("Ingenieria Biomedica", "IB", 8),
-        CarreraDto("Ingenieria en Software", "IS", 8),
-        CarreraDto("Biotecnologia Acuatica", "IBA", 8),
+        CarreraDto("Ingeniería Ambiental", "IA", 8),
+        CarreraDto("Ingeniería Biomedica", "IB", 8),
+        CarreraDto("Ingeniería en Software", "IS", 8),
+        CarreraDto("Ingeniería en Biotecnología Acuática", "IBA", 8),
         CarreraDto("Geociencias", "IG", 8),
-        CarreraDto("Horticultura", "IH", 8),
-        CarreraDto("Ingenieria Industrial en Manufactura", "IIM", 8),
-        CarreraDto("Ingenieria Mecatronica", "IM", 8),
-        CarreraDto("Tecnologia de Alimentos", "ITA", 8),
+        CarreraDto("Ingeniería en Hortícultura", "IH", 8),
+        CarreraDto("Ingeniería Industrial en Manufactura", "IIM", 8),
+        CarreraDto("Ingeniería Mecatrónica", "IM", 8),
+        CarreraDto("Ingeniería en Tecnología de Alimentos", "ITA", 8),
 
         // Licenciaturas
         CarreraDto("Administracion de Empresas", "LAE", 8),

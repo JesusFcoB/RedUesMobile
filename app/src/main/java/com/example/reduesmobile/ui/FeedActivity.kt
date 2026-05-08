@@ -14,6 +14,7 @@ import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reduesmobile.ui.Perfil
 import com.example.reduesmobile.R
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.AuthApi
@@ -113,7 +114,7 @@ class FeedActivity : AppCompatActivity(), OnPostActionListener {
     }
 
     private fun setupRefreshLayout() {
-        val colorUes = android.graphics.Color.parseColor("#ff7400")
+        val colorUes = ContextCompat.getColor(this, R.color.fondoLoginbtn)
         binding.swipeRefresh.setColorSchemeColors(colorUes)
         binding.swipeRefresh.setOnRefreshListener {
             postAdapter.refresh()
@@ -121,7 +122,9 @@ class FeedActivity : AppCompatActivity(), OnPostActionListener {
     }
 
     override fun onUserNameClick(post: PublicacionResponse?, position: Int) {
-        TODO("Abrir el perfil del usuario")
+        val perfil = Intent(this@FeedActivity, Perfil::class.java)
+        perfil.putExtra("idUsuario", post?.idAutor)
+        startActivity(perfil)
     }
 
     override fun onLikeClick(post: PublicacionResponse?, position: Int) {
