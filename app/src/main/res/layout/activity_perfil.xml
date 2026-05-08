@@ -300,80 +300,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardPerfil" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="382dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="24dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeUserRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="497dp"
+        app:layout_constraintBottom_toTopOf="@+id/toolbarPerfil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10">
 
-        <ImageView
-            android:id="@+id/btnComentar2"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Comentar"
-            android:focusable="true"
-            android:src="@drawable/comentario" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUserPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <ImageView
-            android:id="@+id/btnGuardar2"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="58dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Guardar publicación"
-            android:focusable="true"
-            android:src="@drawable/guardado" />
-
-        <ImageView
-            android:id="@+id/btnLike2"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="106dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Dar like"
-            android:focusable="true"
-            android:src="@drawable/like" />
-
-        <TextView
-            android:id="@+id/txtUsuarioPost2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="61dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-black"
-            android:text="Usuario"
-            android:textSize="25sp" />
-
-        <ImageView
-            android:id="@+id/perfil2"
-            android:layout_width="49dp"
-            android:layout_height="49dp"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/perfil" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/contenido"
-            android:layout_width="337dp"
-            android:layout_height="122dp"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/fondoLogin" />
-    </androidx.cardview.widget.CardView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

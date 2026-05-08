@@ -29,9 +29,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
-class FeedActivity : AppCompatActivity(), OnPostActionListener {
+class FeedActivity : AppCompatActivity() {
     lateinit var binding: ActivityFeedBinding
     private lateinit var postAdapter: PostAdapter
+    private lateinit var actions: OnPostActionListenerImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,15 @@ class FeedActivity : AppCompatActivity(), OnPostActionListener {
         setContentView(binding.root)
 
         setupRecyclerView()
+
+        actions = OnPostActionListenerImpl(
+            context = this,
+            rvPosts = binding.rvPosts,
+            postAdapter = postAdapter,
+            scope = lifecycleScope
+        )
+        postAdapter.setListener(actions)
+
         setupPaging()
         setupRefreshLayout()
 
@@ -58,7 +68,7 @@ class FeedActivity : AppCompatActivity(), OnPostActionListener {
 
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter(this)
+        postAdapter = PostAdapter(null)
 
         // Usamos binding para acceder al RecyclerView de tu activity_feed.xml
         binding.rvPosts.apply {
@@ -121,91 +131,91 @@ class FeedActivity : AppCompatActivity(), OnPostActionListener {
         }
     }
 
-    override fun onUserNameClick(post: PublicacionResponse?, position: Int) {
-        val perfil = Intent(this@FeedActivity, Perfil::class.java)
-        perfil.putExtra("idUsuario", post?.idAutor)
-        startActivity(perfil)
-    }
-
-    override fun onLikeClick(post: PublicacionResponse?, position: Int) {
-        if (post != null) {
-            val holder = binding.rvPosts.findViewHolderForAdapterPosition(position) as? PostAdapter.PostViewHolder
-            holder?.btnLike?.isEnabled = false
-
-            post.yaDioLike = !post.yaDioLike
-            binding.rvPosts.postDelayed({
-                postAdapter.notifyItemChanged(position)
-            }, 100)
-
-                lifecycleScope.launch {
-                    try {
-                        val api = RetrofitInstance.Companion
-                            .getRetrofitInstance(this@FeedActivity)
-                            .create(LikesApi::class.java)
-                        val response = api.toggleLike(post.idPublicacion)
-
-                        if (!response.isSuccessful) {
-                            post.yaDioLike = !post.yaDioLike
-                            postAdapter.notifyItemChanged(position)
-
-                            Toast.makeText(this@FeedActivity, "Error al procesar like", Toast.LENGTH_LONG).show()
-                        }
-
-
-                    } catch (e: Exception) {
-                        post.yaDioLike = !post.yaDioLike
-                        postAdapter.notifyItemChanged(position)
-
-                        Toast.makeText(this@FeedActivity, "Error al procesar like", Toast.LENGTH_LONG).show()
-                    } finally {
-                        binding.rvPosts.postDelayed({
-                            holder?.btnLike?.isEnabled = true
-                        }, 500)
-                    }
-                }
-        }
-    }
-
-    override fun onSaveClick(post: PublicacionResponse?, position: Int) {
-        if (post != null) {
-            val holder = binding.rvPosts.findViewHolderForAdapterPosition(position) as? PostAdapter.PostViewHolder
-            holder?.btnGuardar?.isEnabled = false
-
-            post.yaGuardo = !post.yaGuardo
-            binding.rvPosts.postDelayed({
-                postAdapter.notifyItemChanged(position)
-            }, 100)
-
-            lifecycleScope.launch {
-                try {
-                    val api = RetrofitInstance.Companion
-                        .getRetrofitInstance(this@FeedActivity)
-                        .create(GuardadosApi::class.java)
-                    val response = api.toggleGuardado(post.idPublicacion)
-
-                    if (!response.isSuccessful) {
-                        post.yaGuardo = !post.yaGuardo
-                        postAdapter.notifyItemChanged(position)
-
-                        Toast.makeText(this@FeedActivity, "Error al procesar guardado", Toast.LENGTH_LONG).show()
-                    }
-
-
-                } catch (e: Exception) {
-                    post.yaGuardo = !post.yaGuardo
-                    postAdapter.notifyItemChanged(position)
-
-                    Toast.makeText(this@FeedActivity, "Error al procesar guardado", Toast.LENGTH_LONG).show()
-                } finally {
-                    binding.rvPosts.postDelayed({
-                        holder?.btnGuardar?.isEnabled = true
-                    }, 500)
-                }
-            }
-        }
-    }
-
-    override fun onCommentClick(post: PublicacionResponse?, position: Int) {
-        TODO("Abrir la publicacion completa")
-    }
+//    override fun onUserNameClick(post: PublicacionResponse?, position: Int) {
+//        val perfil = Intent(this@FeedActivity, Perfil::class.java)
+//        perfil.putExtra("idUsuario", post?.idAutor)
+//        startActivity(perfil)
+//    }
+//
+//    override fun onLikeClick(post: PublicacionResponse?, position: Int) {
+//        if (post != null) {
+//            val holder = binding.rvPosts.findViewHolderForAdapterPosition(position) as? PostAdapter.PostViewHolder
+//            holder?.btnLike?.isEnabled = false
+//
+//            post.yaDioLike = !post.yaDioLike
+//            binding.rvPosts.postDelayed({
+//                postAdapter.notifyItemChanged(position)
+//            }, 100)
+//
+//                lifecycleScope.launch {
+//                    try {
+//                        val api = RetrofitInstance.Companion
+//                            .getRetrofitInstance(this@FeedActivity)
+//                            .create(LikesApi::class.java)
+//                        val response = api.toggleLike(post.idPublicacion)
+//
+//                        if (!response.isSuccessful) {
+//                            post.yaDioLike = !post.yaDioLike
+//                            postAdapter.notifyItemChanged(position)
+//
+//                            Toast.makeText(this@FeedActivity, "Error al procesar like", Toast.LENGTH_LONG).show()
+//                        }
+//
+//
+//                    } catch (e: Exception) {
+//                        post.yaDioLike = !post.yaDioLike
+//                        postAdapter.notifyItemChanged(position)
+//
+//                        Toast.makeText(this@FeedActivity, "Error al procesar like", Toast.LENGTH_LONG).show()
+//                    } finally {
+//                        binding.rvPosts.postDelayed({
+//                            holder?.btnLike?.isEnabled = true
+//                        }, 500)
+//                    }
+//                }
+//        }
+//    }
+//
+//    override fun onSaveClick(post: PublicacionResponse?, position: Int) {
+//        if (post != null) {
+//            val holder = binding.rvPosts.findViewHolderForAdapterPosition(position) as? PostAdapter.PostViewHolder
+//            holder?.btnGuardar?.isEnabled = false
+//
+//            post.yaGuardo = !post.yaGuardo
+//            binding.rvPosts.postDelayed({
+//                postAdapter.notifyItemChanged(position)
+//            }, 100)
+//
+//            lifecycleScope.launch {
+//                try {
+//                    val api = RetrofitInstance.Companion
+//                        .getRetrofitInstance(this@FeedActivity)
+//                        .create(GuardadosApi::class.java)
+//                    val response = api.toggleGuardado(post.idPublicacion)
+//
+//                    if (!response.isSuccessful) {
+//                        post.yaGuardo = !post.yaGuardo
+//                        postAdapter.notifyItemChanged(position)
+//
+//                        Toast.makeText(this@FeedActivity, "Error al procesar guardado", Toast.LENGTH_LONG).show()
+//                    }
+//
+//
+//                } catch (e: Exception) {
+//                    post.yaGuardo = !post.yaGuardo
+//                    postAdapter.notifyItemChanged(position)
+//
+//                    Toast.makeText(this@FeedActivity, "Error al procesar guardado", Toast.LENGTH_LONG).show()
+//                } finally {
+//                    binding.rvPosts.postDelayed({
+//                        holder?.btnGuardar?.isEnabled = true
+//                    }, 500)
+//                }
+//            }
+//        }
+//    }
+//
+//    override fun onCommentClick(post: PublicacionResponse?, position: Int) {
+//        TODO("Abrir la publicacion completa")
+//    }
 }

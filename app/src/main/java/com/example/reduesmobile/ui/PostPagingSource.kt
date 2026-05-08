@@ -2,11 +2,15 @@ package com.example.reduesmobile.ui
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.reduesmobile.data.api.GuardadosApi
 import com.example.reduesmobile.data.api.PublicacionesApi
 import com.example.reduesmobile.data.dto.PublicacionResponse
+import retrofit2.Response
 
 class PostPagingSource(
-    private val apiService: PublicacionesApi
+    private val publicacionesApi: PublicacionesApi? = null,
+    private val guardadosApi: GuardadosApi? = null,
+    private val idUsuario: Int? = null,
 ): PagingSource<Int, PublicacionResponse>() {
 
 
@@ -14,9 +18,17 @@ class PostPagingSource(
         val position = params.key ?: 1 // Empezamos en la página 1
         return try {
             // Llamada a la API
-            val response = apiService.obtenerPublicaciones(position,10)
+            val response = if (publicacionesApi != null) {
+                if (idUsuario == null) {
+                    publicacionesApi.obtenerPublicaciones(position,10)
+                } else {
+                    publicacionesApi.obtenerPublicacionesPorUsuario(idUsuario, position, 10)
+                }
+            } else {
+                guardadosApi?.obtenerGuardados(position,10)
+            }
 
-            if (response.isSuccessful) {
+            if (response!!.isSuccessful) {
                 val posts = response.body() ?: emptyList()
 
                 LoadResult.Page(

@@ -14,8 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reduesmobile.R
 import com.example.reduesmobile.data.dto.PublicacionResponse
 
-class PostAdapter(private val listener: OnPostActionListener):
+class PostAdapter(private var listener: OnPostActionListener?):
     PagingDataAdapter<PublicacionResponse, PostAdapter.PostViewHolder>(DiffCallback) {
+
+    fun setListener(newListener: OnPostActionListener) {
+        this.listener = newListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
@@ -48,7 +52,7 @@ class PostAdapter(private val listener: OnPostActionListener):
                     val latestItem = getItem(currentPos)
                     latestItem?.let {
                         holder.btnLike.bounceAnimation()
-                        listener.onLikeClick(it, currentPos)
+                        listener?.onLikeClick(it, currentPos)
                     }
                 }
             }
@@ -60,13 +64,13 @@ class PostAdapter(private val listener: OnPostActionListener):
                     val latestItem = getItem(currentPos)
                     latestItem?.let {
                         holder.btnGuardar.bounceAnimation()
-                        listener.onSaveClick(it, currentPos)
+                        listener?.onSaveClick(it, currentPos)
                     }
                 }
             }
 
-            holder.btnCommenar.setOnClickListener { listener.onCommentClick(item, holder.bindingAdapterPosition) }
-            holder.usuario.setOnClickListener { listener.onUserNameClick(item, holder.bindingAdapterPosition) }
+            holder.btnCommenar.setOnClickListener { listener?.onCommentClick(item, holder.bindingAdapterPosition) }
+            holder.usuario.setOnClickListener { listener?.onUserNameClick(item, holder.bindingAdapterPosition) }
         }
 
 
