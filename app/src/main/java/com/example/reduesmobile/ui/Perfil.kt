@@ -1,7 +1,10 @@
 package com.example.reduesmobile.ui
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -29,6 +32,8 @@ class Perfil : AppCompatActivity() {
     lateinit var binding: ActivityPerfilBinding
     private lateinit var postAdapter: PostAdapter
     private lateinit var actions: OnPostActionListenerImpl
+    private var idPerfil: Int = 0
+    private var loSigo: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +70,9 @@ class Perfil : AppCompatActivity() {
                 binding.contSeguidos.text = perfil.cantidadSiguiendo.toString()
                 binding.contSeguidores.text = perfil.cantidadSeguidores.toString()
                 binding.contPublicaciones.text = perfil.cantidadPublicaciones.toString()
-
+                idPerfil = perfil.id
+                loSigo = perfil.loSigo
+                configurarBotones()
             }
         }
     }
@@ -151,6 +158,28 @@ class Perfil : AppCompatActivity() {
         binding.swipeUserRefresh.setColorSchemeColors(colorUes)
         binding.swipeUserRefresh.setOnRefreshListener {
             postAdapter.refresh()
+        }
+    }
+
+    private fun configurarBotones() {
+        if (idPerfil != TokenManager(this@Perfil).getUserId()) {
+            val colorSeguir = Color.GRAY
+            val colorDejarSeguir = ContextCompat.getColor(this@Perfil, R.color.naranja_oscuro)
+
+            binding.btnSeguir.text = if (loSigo) "Dejar de seguir" else "Seguir"
+            binding.btnSeguir.backgroundTintList = ColorStateList.valueOf(
+                if (loSigo) colorDejarSeguir else colorSeguir)
+
+            binding.btnSeguir.visibility = View.VISIBLE
+            binding.btnEditarPerfil.visibility = View.GONE
+            binding.btnPublicacionesGuardadas.visibility = View.GONE
+            binding.btnCerrarSesion.visibility = View.GONE
+        } else {
+            binding.btnSeguir.visibility = View.GONE
+            binding.btnEditarPerfil.visibility = View.VISIBLE
+            binding.btnPublicacionesGuardadas.visibility = View.VISIBLE
+            binding.btnCerrarSesion.visibility = View.VISIBLE
+
         }
     }
 }
