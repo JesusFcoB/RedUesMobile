@@ -2,9 +2,12 @@ package com.example.reduesmobile.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -17,13 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reduesmobile.ui.Perfil
 import com.example.reduesmobile.R
 import com.example.reduesmobile.data.RetrofitInstance
-import com.example.reduesmobile.data.api.AuthApi
-import com.example.reduesmobile.data.api.GuardadosApi
-import com.example.reduesmobile.data.api.LikesApi
 import com.example.reduesmobile.data.api.PublicacionesApi
+import com.example.reduesmobile.data.api.UsuariosApi
 import com.example.reduesmobile.data.auth.TokenManager
-import com.example.reduesmobile.data.dto.LoginRequest
-import com.example.reduesmobile.data.dto.PublicacionResponse
 import com.example.reduesmobile.databinding.ActivityFeedBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -32,6 +31,7 @@ import kotlinx.coroutines.launch
 class FeedActivity : AppCompatActivity() {
     lateinit var binding: ActivityFeedBinding
     private lateinit var postAdapter: PostAdapter
+    private lateinit var profileAdapter: ProfileAdapter
     private lateinit var actions: OnPostActionListenerImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +40,8 @@ class FeedActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupRecyclerView()
+        setupProfileRecycler()
+
 
         actions = OnPostActionListenerImpl(
             context = this,
@@ -57,6 +59,34 @@ class FeedActivity : AppCompatActivity() {
             val logout = Intent(this, MainActivity::class.java)
             startActivity(logout)
             finish()
+        }
+
+        binding.btnAccionBusqueda.setOnClickListener {
+            val username = binding.buscar.query?.toString()?.trim().orEmpty()
+            if (username.isNotBlank()) {
+                searchAnimationIn()
+                loadProfiles(username)
+            } else {
+                Toast.makeText(this, "Ingresa un usuario para buscar", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.btnBack.setOnClickListener {
+            searchAnimationOut()
+        }
+
+        onBackPressedDispatcher.addCallback(this, backCallback)
+
+    }
+
+    private val backCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+
+            if (binding.cardSearchResults.visibility == View.VISIBLE) {
+                searchAnimationOut()
+            } else {
+                finish()
+            }
         }
     }
 
@@ -129,5 +159,87 @@ class FeedActivity : AppCompatActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             postAdapter.refresh()
         }
+    }
+
+    private fun setupProfileRecycler() {
+        profileAdapter = ProfileAdapter { perfil ->
+            val intent = Intent(this, Perfil::class.java)
+            intent.putExtra("idUsuario", perfil.id)
+            startActivity(intent)
+        }
+
+        binding.rvUserSearch.apply {
+            layoutManager = LinearLayoutManager(this@FeedActivity)
+            adapter = profileAdapter
+        }
+    }
+
+    private fun loadProfiles(username: String) {
+        lifecycleScope.launch {
+            try {
+                val api = RetrofitInstance
+                    .getRetrofitInstance(this@FeedActivity)
+                    .create(UsuariosApi::class.java)
+
+                val response = api.buscarPerfil(username, null)
+
+                if (response.isSuccessful) {
+                    val list = response.body().orEmpty()
+
+                    profileAdapter.submitList(list)
+
+                    binding.cardSearchResults.visibility = View.VISIBLE
+
+                    if (list.isEmpty()) {
+                        binding.txtResultadoBusqueda.text = "No hay resultados"
+                        binding.rvUserSearch.visibility = View.GONE
+                    } else {
+                        binding.txtResultadoBusqueda.text = "Resultados"
+                        binding.rvUserSearch.visibility = View.VISIBLE
+                    }
+
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@FeedActivity, "Error cargando perfiles", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun searchAnimationIn() {
+        binding.viewBlurOverlay.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            animate().alpha(1f).setDuration(300).start()
+        }
+
+        binding.cardSearchResults.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            translationY = -50f
+
+            animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(300)
+                .start()
+        }
+    }
+
+    private fun searchAnimationOut() {
+        binding.viewBlurOverlay.animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction { binding.viewBlurOverlay.visibility = View.GONE }
+            .start()
+
+        binding.cardSearchResults.animate()
+            .alpha(0f)
+            .translationY(-50f)
+            .setDuration(300)
+            .withEndAction {
+                binding.cardSearchResults.visibility = View.GONE
+                profileAdapter.submitList(emptyList())
+            }
+            .start()
     }
 }

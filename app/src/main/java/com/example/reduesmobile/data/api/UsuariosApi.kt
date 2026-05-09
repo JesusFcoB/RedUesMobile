@@ -16,7 +16,7 @@ interface UsuariosApi {
 
     @GET("v1/usuarios")
     suspend fun buscarPerfil(@Query("usuario") nombreUsuario: String,
-                             @Query("filtro") filtro: String): Response<List<PerfilRequest>>
+                             @Query("filtro") filtro: String?): Response<List<PerfilResponse>>
 
     @PUT("v1/usuarios/perfiles")
     suspend fun editarPerfil(@Body perfilRequest: PerfilRequest): Response<Unit>
