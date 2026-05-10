@@ -8,7 +8,7 @@
     android:background="@color/guinda"
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
-    tools:context=".Apunte">
+    tools:context=".ui.Apunte">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardApunte"

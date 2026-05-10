@@ -2,10 +2,7 @@ package com.example.reduesmobile.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +14,6 @@ import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.reduesmobile.ui.Perfil
 import com.example.reduesmobile.R
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.PublicacionesApi
@@ -54,13 +50,9 @@ class FeedActivity : AppCompatActivity() {
         setupPaging()
         setupRefreshLayout()
 
-        binding.btnPerfil.setOnClickListener {
-            TokenManager(this).deleteToken()
-            val logout = Intent(this, MainActivity::class.java)
-            startActivity(logout)
-            finish()
+        NavigationHelper.setupBottomNavigation(this, binding.bottomNavigation) {
+            binding.rvPosts.scrollToPosition(0)
         }
-
         binding.btnAccionBusqueda.setOnClickListener {
             val username = binding.buscar.query?.toString()?.trim().orEmpty()
             if (username.isNotBlank()) {

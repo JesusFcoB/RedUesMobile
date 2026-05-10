@@ -20,7 +20,7 @@
             android:name=".ui.Perfil"
             android:exported="false" />
         <activity
-            android:name=".Apunte"
+            android:name=".ui.Apunte"
             android:exported="false" />
         <activity
             android:name=".ui.Publicacion"

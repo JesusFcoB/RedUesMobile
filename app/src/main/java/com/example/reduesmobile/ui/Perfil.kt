@@ -56,6 +56,16 @@ class Perfil : AppCompatActivity() {
         setupPaging(idUsuario)
         setupRefreshLayout()
 
+        binding.btnCerrarSesion.setOnClickListener {
+            TokenManager(this).deleteToken()
+            val logout = Intent(this, MainActivity::class.java)
+            startActivity(logout)
+            finish()
+        }
+
+        NavigationHelper.setupBottomNavigation(this, binding.bottomNavigation) {
+            binding.rvUserPosts.scrollToPosition(0)
+        }
     }
 
     private fun llenarPerfil(idUsuario: Int) {
@@ -64,9 +74,9 @@ class Perfil : AppCompatActivity() {
             val perfil = obtenerPerfil(idUsuario)
             if (perfil != null) {
                 binding.txtUsuarioPerfil.text = perfil.userName
-                binding.txtCarrera.text = Carreras.listaCarreras.find { c -> c.nombre==perfil.carrera}?.nombreCorto
+                binding.txtCarrera.text = perfil.carrera
                 binding.txtBio.text = perfil.bio
-                binding.txtSemestre.text = " - ${perfil.semestre} semestre"
+                binding.txtSemestre.text = "${perfil.semestre} semestre"
                 binding.contSeguidos.text = perfil.cantidadSiguiendo.toString()
                 binding.contSeguidores.text = perfil.cantidadSeguidores.toString()
                 binding.contPublicaciones.text = perfil.cantidadPublicaciones.toString()

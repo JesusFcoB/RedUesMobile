@@ -63,85 +63,15 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <include
+        layout="@layout/toolbar_navigation"
+        android:id="@+id/bottomNavigation"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginBottom="10dp"
-        android:background="@android:color/transparent"
-        android:elevation="0dp"
-
-        app:contentInsetStart="0dp"
-        app:contentInsetEnd="0dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/rounded_toolbar"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:elevation="10dp">
-
-            <ImageView
-                android:id="@+id/btnInicio"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="Inicio"
-                android:focusable="true"
-                android:padding="8dp"
-                android:src="@drawable/inicio" />
-
-            <ImageView
-                android:id="@+id/btnCrearApunte"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="Crear apunte"
-                android:focusable="true"
-                android:padding="8dp"
-                android:src="@drawable/crear_apunte" />
-
-            <ImageView
-                android:id="@+id/btnCrearPublicacion"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="Crear publicación"
-                android:focusable="true"
-                android:padding="8dp"
-                android:src="@drawable/crear_publicacion" />
-
-            <ImageView
-                android:id="@+id/btnPerfil"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="Perfil"
-                android:focusable="true"
-                android:padding="8dp"
-                android:src="@drawable/perfil_boton" />
-
-        </LinearLayout>
-
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/viewBlurOverlay"
