@@ -28,7 +28,7 @@ class PostPagingSource(
                 guardadosApi?.obtenerGuardados(position,10)
             }
 
-            if (response!!.isSuccessful) {
+            if (response != null && response.isSuccessful) {
                 val posts = response.body() ?: emptyList()
 
                 LoadResult.Page(
@@ -38,12 +38,11 @@ class PostPagingSource(
                     nextKey = if (posts.isEmpty()) null else position + 1
                 )
             } else {
-                LoadResult.Error(Exception("Error en el servidor: ${response.code()}"))
+                LoadResult.Error(Exception("Error en el servidor: ${response?.code()}"))
             }
 
         } catch (e: Exception) {
-            LoadResult.Error(e)
-        }
+            LoadResult.Error(Exception("Error al conectar con el servidor"))        }
     }
 
     override fun getRefreshKey(state: PagingState<Int, PublicacionResponse>): Int? = null

@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface GuardadosApi {
 
-    @GET("publicaciones/guardados")
+    @GET("v1/publicaciones/guardados")
     suspend fun obtenerGuardados(@Query("page") page: Int,
                                  @Query("pageSize") pageSize: Int
     ): Response<List<PublicacionResponse>>

@@ -66,6 +66,11 @@ class Perfil : AppCompatActivity() {
         NavigationHelper.setupBottomNavigation(this, binding.bottomNavigation) {
             binding.rvUserPosts.scrollToPosition(0)
         }
+
+        binding.btnPublicacionesGuardadas.setOnClickListener {
+            val guardados = Intent(this, GuardadosActivity::class.java)
+            startActivity(guardados)
+        }
     }
 
     private fun llenarPerfil(idUsuario: Int) {

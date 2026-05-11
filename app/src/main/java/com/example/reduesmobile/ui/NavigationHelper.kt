@@ -13,8 +13,8 @@ object NavigationHelper {
                 onReselect?.invoke()
             } else {
                 val intent = Intent(activity, FeedActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 activity.startActivity(intent)
-                activity.finish()
             }
         }
 
@@ -23,8 +23,10 @@ object NavigationHelper {
                 onReselect?.invoke()
             } else {
                 val idUsuario = TokenManager(activity).getUserId()
-                val intent = Intent(activity, Perfil::class.java)
-                intent.putExtra("idUsuario", idUsuario)
+                val intent = Intent(activity, Perfil::class.java).apply {
+                    putExtra("idUsuario", idUsuario)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
                 activity.startActivity(intent)
             }
         }
@@ -32,6 +34,7 @@ object NavigationHelper {
         navBinding.btnCrearPublicacion.setOnClickListener {
             if (activity !is Publicacion) {
                 val intent = Intent(activity, Publicacion::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 activity.startActivity(intent)
             }
         }
@@ -40,6 +43,7 @@ object NavigationHelper {
         navBinding.btnCrearApunte.setOnClickListener {
             if (activity !is Apunte) {
                 val intent = Intent(activity, Apunte::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 activity.startActivity(intent)
             }
         }
