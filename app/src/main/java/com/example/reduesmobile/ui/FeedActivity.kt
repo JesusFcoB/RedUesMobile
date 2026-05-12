@@ -56,6 +56,7 @@ class FeedActivity : AppCompatActivity() {
         binding.btnAccionBusqueda.setOnClickListener {
             val username = binding.buscar.query?.toString()?.trim().orEmpty()
             if (username.isNotBlank()) {
+                binding.buscar.clearFocus()
                 searchAnimationIn()
                 loadProfiles(username)
             } else {

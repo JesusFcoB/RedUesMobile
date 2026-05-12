@@ -54,6 +54,7 @@ class Publicacion : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     binding.etPublicacion.text.clear()
+                    binding.etPublicacion.clearFocus()
                     Toast.makeText(
                         this@Publicacion,
                         "Publicacion agregada exitosamente",

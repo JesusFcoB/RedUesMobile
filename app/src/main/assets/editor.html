@@ -86,6 +86,12 @@
     function setEditorData(html) {
         editorInstance.setData(html);
     }
+
+    function clearEditorData() {
+        if (editorInstance) {
+            editorInstance.setData('');
+        }
+    }
 </script>
 </body>
 </html>
