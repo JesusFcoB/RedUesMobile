@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -19,6 +20,7 @@ import com.example.reduesmobile.data.Carreras
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.AuthApi
 import com.example.reduesmobile.data.api.PublicacionesApi
+import com.example.reduesmobile.data.api.SeguidoresApi
 import com.example.reduesmobile.data.api.UsuariosApi
 import com.example.reduesmobile.data.auth.TokenManager
 import com.example.reduesmobile.data.dto.PerfilResponse
@@ -70,6 +72,22 @@ class Perfil : AppCompatActivity() {
         binding.btnPublicacionesGuardadas.setOnClickListener {
             val guardados = Intent(this, GuardadosActivity::class.java)
             startActivity(guardados)
+        }
+
+        binding.btnSeguir.setOnClickListener {
+            lifecycleScope.launch {
+                binding.btnSeguir.isEnabled = false
+                if (!loSigo) {
+                    loSigo = false
+                    botonSeguir()
+                    seguir(idPerfil)
+                } else {
+                    loSigo = true
+                    botonSeguir()
+                    dejarDeSeguir(idPerfil)
+                }
+                binding.btnSeguir.isEnabled = true
+            }
         }
     }
 
@@ -176,15 +194,59 @@ class Perfil : AppCompatActivity() {
         }
     }
 
+    private suspend fun seguir(idUsuario: Int) {
+        try {
+            val api = RetrofitInstance
+                .getRetrofitInstance(this@Perfil)
+                .create(SeguidoresApi::class.java)
+
+            val response = api.seguir(idUsuario)
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    loSigo = body.isFollowing
+                    if (loSigo) {
+                        botonSeguir()
+                        binding.contSeguidores.text = body.seguidoresCount.toString()
+                    } else {
+                        Toast.makeText(this@Perfil, "Error al seguir al usuario", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this@Perfil, "Error al procesar la solicitud ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private suspend fun dejarDeSeguir(idUsuario: Int) {
+        try {
+            val api = RetrofitInstance
+                .getRetrofitInstance(this@Perfil)
+                .create(SeguidoresApi::class.java)
+
+            val response = api.dejarDeSeguir(idUsuario)
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    loSigo = body.isFollowing
+                    if (!loSigo) {
+                        botonSeguir()
+                        binding.contSeguidores.text = body.seguidoresCount.toString()
+                    } else {
+                        Toast.makeText(this@Perfil, "Error al dejar de seguir al usuario", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this@Perfil, "Error al procesar la solicitud ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun configurarBotones() {
         if (idPerfil != TokenManager(this@Perfil).getUserId()) {
-            val colorSeguir = Color.GRAY
-            val colorDejarSeguir = ContextCompat.getColor(this@Perfil, R.color.naranja_oscuro)
 
-            binding.btnSeguir.text = if (loSigo) "Dejar de seguir" else "Seguir"
-            binding.btnSeguir.backgroundTintList = ColorStateList.valueOf(
-                if (loSigo) colorDejarSeguir else colorSeguir)
-
+            botonSeguir()
             binding.btnSeguir.visibility = View.VISIBLE
             binding.btnEditarPerfil.visibility = View.GONE
             binding.btnPublicacionesGuardadas.visibility = View.GONE
@@ -196,5 +258,14 @@ class Perfil : AppCompatActivity() {
             binding.btnCerrarSesion.visibility = View.VISIBLE
 
         }
+    }
+
+    private fun botonSeguir() {
+        val colorSeguir = Color.GRAY
+        val colorDejarSeguir = ContextCompat.getColor(this@Perfil, R.color.naranja_oscuro)
+
+        binding.btnSeguir.text = if (loSigo) "Dejar de seguir" else "Seguir"
+        binding.btnSeguir.backgroundTintList = ColorStateList.valueOf(
+            if (loSigo) colorDejarSeguir else colorSeguir)
     }
 }

@@ -62,7 +62,7 @@ class Apunte : AppCompatActivity() {
             loadUrl("file:///android_asset/editor.html")
         }
     }
-    
+
     private fun limpiarFormulario() {
         binding.webViewEditor.evaluateJavascript("clearEditorData();", null)
         binding.webViewEditor.clearFocus()
