@@ -1,6 +1,7 @@
 package com.example.reduesmobile.data.dto
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class ComentarioResponse(
     @SerializedName("comentario_id")
@@ -16,4 +17,4 @@ data class ComentarioResponse(
 
     @SerializedName("fecha_comentario")
     val fechaComentario: String
-)
+) : Serializable

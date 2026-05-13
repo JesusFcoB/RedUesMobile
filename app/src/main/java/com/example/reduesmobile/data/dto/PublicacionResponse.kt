@@ -1,6 +1,7 @@
 package com.example.reduesmobile.data.dto
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class PublicacionResponse(
     @SerializedName("publicacion_id")
@@ -19,4 +20,4 @@ data class PublicacionResponse(
     var yaDioLike: Boolean,
     var cantidadGuardados: Int,
     var yaGuardo: Boolean
-)
+) : Serializable
