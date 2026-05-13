@@ -1,5 +1,7 @@
 package com.example.reduesmobile.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class PerfilResponse(
     val id: Int,
     val userName: String,

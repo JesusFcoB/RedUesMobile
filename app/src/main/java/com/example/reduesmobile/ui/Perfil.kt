@@ -4,7 +4,9 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -23,6 +25,7 @@ import com.example.reduesmobile.data.api.PublicacionesApi
 import com.example.reduesmobile.data.api.SeguidoresApi
 import com.example.reduesmobile.data.api.UsuariosApi
 import com.example.reduesmobile.data.auth.TokenManager
+import com.example.reduesmobile.data.dto.PerfilRequest
 import com.example.reduesmobile.data.dto.PerfilResponse
 import com.example.reduesmobile.databinding.ActivityFeedBinding
 import com.example.reduesmobile.databinding.ActivityPerfilBinding
@@ -34,6 +37,7 @@ class Perfil : AppCompatActivity() {
     lateinit var binding: ActivityPerfilBinding
     private lateinit var postAdapter: PostAdapter
     private lateinit var actions: OnPostActionListenerImpl
+    var spinnerHelper = RegistrationSpinnersHelper(this)
     private var idPerfil: Int = 0
     private var loSigo: Boolean = false
 
@@ -44,7 +48,9 @@ class Perfil : AppCompatActivity() {
 
         val idUsuario = intent.getIntExtra("idUsuario", 0)
         llenarPerfil(idUsuario)
-
+        spinnerHelper.llenarCarreras(binding.spCarrera)
+        spinnerHelper.llenarSemestres("x",binding.spSemestre)
+        listener()
         setupRecyclerView()
 
         actions = OnPostActionListenerImpl(
@@ -87,6 +93,33 @@ class Perfil : AppCompatActivity() {
                     dejarDeSeguir(idPerfil)
                 }
                 binding.btnSeguir.isEnabled = true
+            }
+        }
+
+        binding.btnEditarPerfil.setOnClickListener {
+            editAnimationIn()
+        }
+
+        binding.btnCancelar.setOnClickListener {
+            editAnimationOut()
+            //TODO: limpiar
+        }
+
+        binding.btnGuardarCambios.setOnClickListener {
+
+            //TODO: validar
+            val bio = binding.etBio.text.toString()
+            val carrera = binding.spCarrera.selectedItem.toString().substringBefore(" (")
+            val semestre = binding.spSemestre.selectedItem.toString().toInt()
+
+            Log.i("INFO", "Semestre: $semestre")
+            val request = PerfilRequest(
+                bio,
+                carrera,
+                semestre
+            )
+            lifecycleScope.launch {
+                editarPerfil(request)
             }
         }
     }
@@ -260,6 +293,29 @@ class Perfil : AppCompatActivity() {
         }
     }
 
+    private suspend fun editarPerfil(request: PerfilRequest) {
+        try {
+            val api = RetrofitInstance
+                .getRetrofitInstance(this@Perfil)
+                .create(UsuariosApi::class.java)
+
+            val response = api.editarPerfil(request)
+
+            if (response.isSuccessful) {
+                binding.txtBio.text = request.bio
+                binding.txtCarrera.text = request.carrera
+                binding.txtSemestre.text = "${request.semestre} Semestre"
+                editAnimationOut()
+                //TODO: limpiar los campos de la card
+                return
+            }
+
+            Toast.makeText(this@Perfil, "Error al editar el perfil: ${response.errorBody().toString()}", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this@Perfil, "Error al procesar la solicitud ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun botonSeguir() {
         val colorSeguir = Color.GRAY
         val colorDejarSeguir = ContextCompat.getColor(this@Perfil, R.color.naranja_oscuro)
@@ -268,4 +324,60 @@ class Perfil : AppCompatActivity() {
         binding.btnSeguir.backgroundTintList = ColorStateList.valueOf(
             if (loSigo) colorDejarSeguir else colorSeguir)
     }
+
+    private fun listener() {
+        binding.spCarrera.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                if(position > 0) {
+                    val carreraSeleccionada =  parent?.getItemAtPosition(position).toString()
+                    val nombreReal = carreraSeleccionada.substringBefore(" (")
+                    spinnerHelper.llenarSemestres(nombreReal, binding.spSemestre)
+                } else {
+                    spinnerHelper.llenarSemestres("x", binding.spSemestre)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+    }
+
+    private fun editAnimationIn() {
+        binding.viewBlurOverlay.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            animate().alpha(1f).setDuration(300).start()
+        }
+
+        binding.cardEditarPerfil.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            translationY = -50f
+
+            animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(300)
+                .start()
+        }
+    }
+
+    private fun editAnimationOut() {
+        binding.viewBlurOverlay.animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction { binding.viewBlurOverlay.visibility = View.GONE }
+            .start()
+
+        binding.cardEditarPerfil.animate()
+            .alpha(0f)
+            .translationY(-50f)
+            .setDuration(300)
+            .withEndAction {
+                binding.cardEditarPerfil.visibility = View.GONE
+            }
+            .start()
+    }
+
 }
