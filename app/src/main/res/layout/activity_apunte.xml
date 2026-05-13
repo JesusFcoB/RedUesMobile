@@ -88,9 +88,9 @@
                 android:drawablePadding="8dp"
                 android:text="Publicar"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 app:icon="@drawable/add_publicacion"
-                app:iconSize="30dp"
+                app:iconSize="24dp"
                 app:iconTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

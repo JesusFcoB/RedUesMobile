@@ -36,4 +36,5 @@ interface PublicacionesApi {
 
     @DELETE("v1/publicaciones/{id}")
     suspend fun eliminarPulicacion(@Path("id") idpublicacion: Int): Response<Unit>
+
 }
