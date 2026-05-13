@@ -3,7 +3,7 @@ package com.example.reduesmobile.ui
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.GuardadosApi
@@ -103,6 +103,10 @@ class OnPostActionListenerImpl(
     }
 
     override fun onCommentClick(post: PublicacionResponse?, position: Int) {
-        TODO("Abrir la publicacion completa")
+        if (post != null && context is AppCompatActivity) {
+            // USAR newInstance PARA EVITAR ERRORES DE INSTANCIACIÓN
+            val bottomSheet = CommentsBottomSheetFragment.newInstance(post)
+            bottomSheet.show(context.supportFragmentManager, CommentsBottomSheetFragment.TAG)
+        }
     }
 }

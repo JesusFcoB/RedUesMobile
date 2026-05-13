@@ -26,14 +26,14 @@ interface PublicacionesApi {
     ): Response<List<PublicacionResponse>>
 
     @POST("v1/publicaciones")
-    suspend fun crearPublicacion(@Body publicacionRequest: PublicacionRequest)
+    suspend fun crearPublicacion(@Body publicacionRequest: PublicacionRequest): Response<Unit>
 
     @POST("v1/publicaciones/apuntes")
-    suspend fun crearApunte(@Body publicacionRequest: PublicacionRequest)
+    suspend fun crearApunte(@Body publicacionRequest: PublicacionRequest): Response<Unit>
 
     @PUT("v1/publicaciones")
-    suspend fun editarPublicacion(@Body publicacionRequest: PublicacionRequest)
+    suspend fun editarPublicacion(@Body publicacionRequest: PublicacionRequest): Response<Unit>
 
     @DELETE("v1/publicaciones/{id}")
-    suspend fun eliminarPulicacion(@Path("id") idpublicacion: Int)
+    suspend fun eliminarPulicacion(@Path("id") idpublicacion: Int): Response<Unit>
 }
