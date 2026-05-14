@@ -112,7 +112,6 @@ class Perfil : AppCompatActivity() {
             val carrera = binding.spCarrera.selectedItem.toString().substringBefore(" (")
             val semestre = binding.spSemestre.selectedItem.toString().toInt()
 
-            Log.i("INFO", "Semestre: $semestre")
             val request = PerfilRequest(
                 bio,
                 carrera,
