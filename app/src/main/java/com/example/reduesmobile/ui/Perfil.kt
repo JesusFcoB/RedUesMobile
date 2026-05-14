@@ -163,7 +163,7 @@ class Perfil : AppCompatActivity() {
 
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter(null)
+        postAdapter = PostAdapter(null, this)
 
         // Usamos binding para acceder al RecyclerView de tu activity_feed.xml
         binding.rvUserPosts.apply {

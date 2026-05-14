@@ -1,5 +1,6 @@
 package com.example.reduesmobile.ui
 
+import android.content.Context
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reduesmobile.R
+import com.example.reduesmobile.data.auth.TokenManager
 import com.example.reduesmobile.data.dto.PublicacionResponse
 
-class PostAdapter(private var listener: OnPostActionListener?):
+class PostAdapter(private var listener: OnPostActionListener?, context: Context):
     PagingDataAdapter<PublicacionResponse, PostAdapter.PostViewHolder>(DiffCallback) {
+
+    private val tokenManager = TokenManager(context)
+    private val currentUserId = tokenManager.getUserId()
 
     fun setListener(newListener: OnPostActionListener) {
         this.listener = newListener
@@ -28,7 +33,7 @@ class PostAdapter(private var listener: OnPostActionListener?):
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val item = getItem(position)
-
+        val context = holder.itemView.context
         item?.let {
             holder.usuario.text = it.autor
 
@@ -39,8 +44,19 @@ class PostAdapter(private var listener: OnPostActionListener?):
                 holder.contenido.text = it.contenido
             }
 
+            if (it.idAutor == currentUserId) {
+                holder.btnEditar.visibility = View.VISIBLE
+                holder.btnEliminar.visibility = View.VISIBLE
+            } else {
+                holder.btnEditar.visibility = View.GONE
+                holder.btnEliminar.visibility = View.GONE
+            }
+
             val likeIcon = if (item.yaDioLike) R.drawable.like_relleno else R.drawable.like
             val savedIcon = if (item.yaGuardo) R.drawable.guardado_relleno else R.drawable.guardado
+            holder.txtLikesCount.text = it.cantidadLikes.toString()
+            holder.txtGuardadosCount.text = it.cantidadGuardados.toString()
+            holder.txtComentariosCount.text = it.comentarios.size.toString()
 
             holder.btnLike.setImageResource(likeIcon)
             holder.btnGuardar.setImageResource(savedIcon)
@@ -83,6 +99,11 @@ class PostAdapter(private var listener: OnPostActionListener?):
         val btnLike: ImageView = view.findViewById(R.id.btnLike)
         val btnGuardar: ImageView = view.findViewById(R.id.btnGuardar)
         val btnCommenar: ImageView = view.findViewById(R.id.btnComentar)
+        val btnEliminar: ImageView = view.findViewById(R.id.btnEliminar)
+        val btnEditar: ImageView = view.findViewById(R.id.btnEditar)
+        val txtLikesCount: TextView = view.findViewById(R.id.txtLikeCount)
+        val txtGuardadosCount: TextView = view.findViewById(R.id.txtGuardarCount)
+        val txtComentariosCount: TextView = view.findViewById(R.id.txtComentarioCount)
 
     }
 

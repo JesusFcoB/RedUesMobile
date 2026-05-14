@@ -30,6 +30,11 @@ class OnPostActionListenerImpl(
             holder?.btnLike?.isEnabled = false
 
             post.yaDioLike = !post.yaDioLike
+            if (post.yaDioLike) {
+                post.cantidadLikes += 1
+            } else {
+                post.cantidadLikes -= 1
+            }
             rvPosts.postDelayed({
                 postAdapter.notifyItemChanged(position)
             }, 100)
@@ -42,7 +47,7 @@ class OnPostActionListenerImpl(
                     val response = api.toggleLike(post.idPublicacion)
 
                     if (!response.isSuccessful) {
-                        post.yaDioLike = !post.yaDioLike
+                        revertirLike(post, position)
                         postAdapter.notifyItemChanged(position)
 
                         Toast.makeText(context, "Error al procesar like", Toast.LENGTH_LONG).show()
@@ -50,7 +55,7 @@ class OnPostActionListenerImpl(
 
 
                 } catch (e: Exception) {
-                    post.yaDioLike = !post.yaDioLike
+                    revertirLike(post, position)
                     postAdapter.notifyItemChanged(position)
 
                     Toast.makeText(context, "Error al procesar like", Toast.LENGTH_LONG).show()
@@ -69,6 +74,11 @@ class OnPostActionListenerImpl(
             holder?.btnGuardar?.isEnabled = false
 
             post.yaGuardo = !post.yaGuardo
+            if (post.yaGuardo) {
+                post.cantidadGuardados += 1
+            } else {
+                post.cantidadGuardados -= 1
+            }
             rvPosts.postDelayed({
                 postAdapter.notifyItemChanged(position)
             }, 100)
@@ -81,7 +91,7 @@ class OnPostActionListenerImpl(
                     val response = api.toggleGuardado(post.idPublicacion)
 
                     if (!response.isSuccessful) {
-                        post.yaGuardo = !post.yaGuardo
+                        revertirGuardado(post, position)
                         postAdapter.notifyItemChanged(position)
 
                         Toast.makeText(context, "Error al procesar guardado", Toast.LENGTH_LONG).show()
@@ -89,7 +99,7 @@ class OnPostActionListenerImpl(
 
 
                 } catch (e: Exception) {
-                    post.yaGuardo = !post.yaGuardo
+                    revertirGuardado(post, position)
                     postAdapter.notifyItemChanged(position)
 
                     Toast.makeText(context, "Error al procesar guardado", Toast.LENGTH_LONG).show()
@@ -108,5 +118,32 @@ class OnPostActionListenerImpl(
             val bottomSheet = CommentsBottomSheetFragment.newInstance(post)
             bottomSheet.show(context.supportFragmentManager, CommentsBottomSheetFragment.TAG)
         }
+    }
+
+    override fun onEditClick(
+        post: PublicacionResponse?,
+        position: Int
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDeleteClick(
+        post: PublicacionResponse?,
+        position: Int
+    ) {
+        TODO("Not yet implemented")
+    }
+
+
+    private fun revertirLike(post: PublicacionResponse, position: Int) {
+        post.yaDioLike = !post.yaDioLike
+        if (post.yaDioLike) post.cantidadLikes += 1 else post.cantidadLikes -= 1
+        postAdapter.notifyItemChanged(position)
+    }
+
+    private fun revertirGuardado(post: PublicacionResponse, position: Int) {
+        post.yaGuardo = !post.yaGuardo
+        if (post.yaGuardo) post.cantidadGuardados += 1 else post.cantidadGuardados -= 1
+        postAdapter.notifyItemChanged(position)
     }
 }

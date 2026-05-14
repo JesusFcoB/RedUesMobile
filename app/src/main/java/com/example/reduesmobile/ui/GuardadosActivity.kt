@@ -62,7 +62,7 @@ class GuardadosActivity : AppCompatActivity() {
 
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter(null)
+        postAdapter = PostAdapter(null, this)
 
         binding.rvSavedPosts.apply {
             layoutManager = LinearLayoutManager(this@GuardadosActivity)

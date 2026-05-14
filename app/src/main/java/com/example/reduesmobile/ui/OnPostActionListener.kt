@@ -7,4 +7,6 @@ interface OnPostActionListener {
     fun onLikeClick(post: PublicacionResponse?, position: Int)
     fun onSaveClick(post: PublicacionResponse?, position: Int)
     fun onCommentClick(post: PublicacionResponse?, position: Int)
+    fun onEditClick(post: PublicacionResponse?, position: Int)
+    fun onDeleteClick(post: PublicacionResponse?, position: Int)
 }
