@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:text="Editar publicación"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Para publicaciones normales -->
+    <EditText
+        android:id="@+id/etContenidoEditar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="Escribe aquí..."
+        android:padding="8dp"
+        android:visibility="gone"/>
+
+    <!-- Para apuntes con WebView -->
+    <WebView
+        android:id="@+id/webViewEditorEditar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btnGuardarEdicion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar cambios"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>

@@ -30,11 +30,21 @@ interface PublicacionesApi {
 
     @POST("v1/publicaciones/apuntes")
     suspend fun crearApunte(@Body publicacionRequest: PublicacionRequest): Response<Unit>
+ //Cambio
+  //  @PUT("v1/publicaciones")
+  //  suspend fun editarPublicacion(@Body publicacionRequest: PublicacionRequest): Response<Unit>
 
-    @PUT("v1/publicaciones")
-    suspend fun editarPublicacion(@Body publicacionRequest: PublicacionRequest): Response<Unit>
+    //@DELETE("v1/publicaciones/{id}")
+    //suspend fun eliminarPulicacion(@Path("id") idpublicacion: Int): Response<Unit>
+
+    @PUT("v1/publicaciones/{id}")
+    suspend fun editarPublicacion(
+        @Path("id") id: Int,
+        @Body request: PublicacionRequest
+    ): Response<PublicacionResponse>
 
     @DELETE("v1/publicaciones/{id}")
-    suspend fun eliminarPulicacion(@Path("id") idpublicacion: Int): Response<Unit>
-
+    suspend fun eliminarPublicacion(
+        @Path("id") id: Int
+    ): Response<Unit>
 }

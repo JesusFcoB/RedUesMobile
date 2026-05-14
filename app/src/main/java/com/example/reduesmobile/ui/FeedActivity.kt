@@ -3,6 +3,7 @@ package com.example.reduesmobile.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,19 @@ class FeedActivity : AppCompatActivity() {
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var actions: OnPostActionListenerImpl
 
+    private var isFirstLoad = true
+
+    // Añade esto junto a las otras propiedades (antes del onCreate)
+    private val editarLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            postAdapter.refresh() // Refresca el feed al volver de editar
+        }
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFeedBinding.inflate(layoutInflater)
@@ -43,7 +57,8 @@ class FeedActivity : AppCompatActivity() {
             context = this,
             rvPosts = binding.rvPosts,
             postAdapter = postAdapter,
-            scope = lifecycleScope
+            scope = lifecycleScope,
+            editarLauncher = editarLauncher  // <-- agrega esto
         )
         postAdapter.setListener(actions)
 
@@ -131,15 +146,14 @@ class FeedActivity : AppCompatActivity() {
                     .distinctUntilChangedBy { it.refresh }
                     .collectLatest { loadStates ->
 
-                        // 1. Controlar la ruedita
                         binding.swipeRefresh.isRefreshing = loadStates.refresh is LoadState.Loading
 
-                        // 2. Solo subir al inicio si el REFRESH terminó con éxito
-                        // y no es una carga de "añadir más" (append)
                         if (loadStates.source.refresh is LoadState.NotLoading &&
-                            loadStates.append is LoadState.NotLoading) {
+                            loadStates.append is LoadState.NotLoading &&
+                            isFirstLoad) {  // <-- solo la primera vez
 
                             binding.rvPosts.scrollToPosition(0)
+                            isFirstLoad = false
                         }
                     }
             }
@@ -150,6 +164,7 @@ class FeedActivity : AppCompatActivity() {
         val colorUes = ContextCompat.getColor(this, R.color.fondoLoginbtn)
         binding.swipeRefresh.setColorSchemeColors(colorUes)
         binding.swipeRefresh.setOnRefreshListener {
+            isFirstLoad = true  // Al hacer pull-to-refresh sí queremos ir al inicio
             postAdapter.refresh()
         }
     }

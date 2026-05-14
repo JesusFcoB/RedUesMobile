@@ -87,9 +87,27 @@ class PostAdapter(private var listener: OnPostActionListener?, context: Context)
 
             holder.btnCommenar.setOnClickListener { listener?.onCommentClick(item, holder.bindingAdapterPosition) }
             holder.usuario.setOnClickListener { listener?.onUserNameClick(item, holder.bindingAdapterPosition) }
+
+            holder.btnEditar.setOnClickListener {
+                val currentPos = holder.bindingAdapterPosition
+                if (currentPos != RecyclerView.NO_POSITION) {
+                    val latestItem = getItem(currentPos)
+                    latestItem?.let {
+                        listener?.onEditClick(it, currentPos)
+                    }
+                }
+            }
+
+            holder.btnEliminar.setOnClickListener {
+                val currentPos = holder.bindingAdapterPosition
+                if (currentPos != RecyclerView.NO_POSITION) {
+                    val latestItem = getItem(currentPos)
+                    latestItem?.let {
+                        listener?.onDeleteClick(it, currentPos)
+                    }
+                }
+            }
         }
-
-
     }
 
     class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {

@@ -20,7 +20,7 @@ import com.example.reduesmobile.databinding.ActivityGuardadosBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
-
+import androidx.activity.result.contract.ActivityResultContracts
 class GuardadosActivity : AppCompatActivity() {
     lateinit var binding: ActivityGuardadosBinding
     private lateinit var postAdapter: PostAdapter
@@ -38,7 +38,13 @@ class GuardadosActivity : AppCompatActivity() {
 
     }
 
-
+    private val editarLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            postAdapter.refresh()
+        }
+    }
     private fun mostrarGuardados() {
         setupRecyclerView()
 
@@ -46,7 +52,8 @@ class GuardadosActivity : AppCompatActivity() {
             context = this,
             rvPosts = binding.rvSavedPosts,
             postAdapter = postAdapter,
-            scope = lifecycleScope
+            scope = lifecycleScope,
+            editarLauncher = editarLauncher  // <-- agregar
         )
         postAdapter.setListener(actions)
 

@@ -32,13 +32,22 @@ import com.example.reduesmobile.databinding.ActivityPerfilBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
-
+import androidx.activity.result.contract.ActivityResultContracts
 class Perfil : AppCompatActivity() {
     lateinit var binding: ActivityPerfilBinding
     private lateinit var postAdapter: PostAdapter
     private lateinit var actions: OnPostActionListenerImpl
     var spinnerHelper = RegistrationSpinnersHelper(this)
     private var idPerfil: Int = 0
+
+    // Agrega junto a las otras propiedades
+    private val editarLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            postAdapter.refresh()
+        }
+    }
     private var loSigo: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +62,13 @@ class Perfil : AppCompatActivity() {
         listener()
         setupRecyclerView()
 
+        // En onCreate(), cambia la creación de actions:
         actions = OnPostActionListenerImpl(
             context = this,
             rvPosts = binding.rvUserPosts,
             postAdapter = postAdapter,
-            scope = lifecycleScope
+            scope = lifecycleScope,
+            editarLauncher = editarLauncher  // <-- agregar
         )
         postAdapter.setListener(actions)
 

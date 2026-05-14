@@ -3,11 +3,15 @@ package com.example.reduesmobile.ui
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.GuardadosApi
 import com.example.reduesmobile.data.api.LikesApi
+import com.example.reduesmobile.data.api.PublicacionesApi
 import com.example.reduesmobile.data.dto.PublicacionResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,6 +21,7 @@ class OnPostActionListenerImpl(
     private val rvPosts: RecyclerView,
     private val postAdapter: PostAdapter,
     private val scope: CoroutineScope,
+    private val editarLauncher: ActivityResultLauncher<Intent> // <-- nuevo parámetro
 ) : OnPostActionListener {
     override fun onUserNameClick(post: PublicacionResponse?, position: Int) {
         val perfil = Intent(context, Perfil::class.java)
@@ -120,18 +125,49 @@ class OnPostActionListenerImpl(
         }
     }
 
-    override fun onEditClick(
-        post: PublicacionResponse?,
-        position: Int
-    ) {
-        TODO("Not yet implemented")
+    override fun onEditClick(post: PublicacionResponse?, position: Int) {
+        if (post != null) {
+            val intent = Intent(context, EditarPublicacion::class.java).apply {
+                putExtra("idPublicacion", post.idPublicacion)
+                putExtra("tipo", post.tipo)
+                putExtra("contenido", post.contenido)
+            }
+            editarLauncher.launch(intent) // <-- usa el launcher
+        }
     }
 
-    override fun onDeleteClick(
-        post: PublicacionResponse?,
-        position: Int
-    ) {
-        TODO("Not yet implemented")
+    override fun onDeleteClick(post: PublicacionResponse?, position: Int) {
+        if (post != null && context is AppCompatActivity) {
+            AlertDialog.Builder(context)
+                .setTitle("Eliminar publicación")
+                .setMessage("¿Estás seguro de que quieres eliminar esta publicación?")
+                .setPositiveButton("Eliminar") { _, _ ->
+                    scope.launch {
+                        try {
+                            val api = RetrofitInstance.getRetrofitInstance(context)
+                                .create(PublicacionesApi::class.java)
+
+                            val response = api.eliminarPublicacion(post.idPublicacion)
+
+                            if (response.isSuccessful) {
+                                // Refrescamos el PagingAdapter
+                                postAdapter.refresh()
+                                Toast.makeText(context, "Publicación eliminada", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Error al eliminar", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Error de red: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+    }
+
+    companion object {
+        const val REQUEST_EDIT = 1001
     }
 
 
