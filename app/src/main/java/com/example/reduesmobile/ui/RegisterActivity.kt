@@ -4,15 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.reduesmobile.data.Carreras
 import com.example.reduesmobile.data.RetrofitInstance
 import com.example.reduesmobile.data.api.AuthApi
 import com.example.reduesmobile.data.auth.TokenManager
-import com.example.reduesmobile.data.dto.CarreraDto
 import com.example.reduesmobile.data.dto.LoginRequest
 import com.example.reduesmobile.data.dto.RegisterRequest
 import com.example.reduesmobile.databinding.ActivityRegisterBinding
@@ -27,41 +24,33 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         spinnerHelper.llenarCarreras(binding.spCarrera)
-        spinnerHelper.llenarSemestres("x",binding.spSemestre)
+        spinnerHelper.llenarSemestres("x", binding.spSemestre)
         listener()
 
         binding.btnRegister.setOnClickListener {
-
-            //Aqui se deberia de validar las bainas locas
-            val error = validarCampos()
-
-            if (error != null) {
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            // 1. Validar campos y mostrar error si existe
+            val mensajeError = validarCampos()
+            if (mensajeError != null) {
+                Toast.makeText(this, mensajeError, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
-            val usuario = binding.txtUsuario.text.toString()
-            val correo = binding.txtEmail.text.toString()
+            // 2. Capturar y limpiar datos (Trimming)
+            val usuario = binding.txtUsuario.text.toString().trim()
+            val correo = binding.txtEmail.text.toString().trim()
             val carrera = binding.spCarrera.selectedItem.toString().substringBefore(" (")
-            val semestre = binding.spSemestre.selectedItem.toString().toInt()
+            val semestreStr = binding.spSemestre.selectedItem.toString()
+            val semestre = semestreStr.toInt()
             val password = binding.txtPassword.text.toString()
             val confirmPassword = binding.txtConfirmPassword.text.toString()
 
-
-            //TODO: validar las entradas antes de crear el objeto(listoso oso)
-
-
-
-
-            val registerRequest: RegisterRequest = RegisterRequest(
+            val registerRequest = RegisterRequest(
                 usuario, correo, carrera, semestre, password, confirmPassword
             )
 
             registrar(registerRequest)
         }
-
     }
-
 
     private fun registrar(request: RegisterRequest) {
         binding.loadingCardRegister.visibility = View.VISIBLE
@@ -70,90 +59,94 @@ class RegisterActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val api = RetrofitInstance.Companion
-                    .getRetrofitInstance(this@RegisterActivity)
+                val api = RetrofitInstance.getRetrofitInstance(this@RegisterActivity)
                     .create(AuthApi::class.java)
 
                 val response = api.register(request)
 
                 if (response.isSuccessful) {
-
-                    val loginRequest: LoginRequest = LoginRequest(
-                        request.nombreUsuario,
-                        request.password)
+                    val loginRequest = LoginRequest(request.nombreUsuario, request.password)
                     iniciarSesion(api, loginRequest)
                 } else {
-                    val errorBody = response.errorBody()?.string()
-
-                    Toast.makeText(
-                        this@RegisterActivity,
-                        "Error al registrar: ${errorBody ?: "Datos incorrectos"}",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    //TODO: personalizar error de inicio de sesion fallido
+                    // Mejora: Intentar extraer el mensaje de error del servidor si existe
+                    val errorMsg = response.errorBody()?.string() ?: "Datos incorrectos o usuario ya existe"
+                    Toast.makeText(this@RegisterActivity, "Fallo en el registro: $errorMsg", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@RegisterActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(this@RegisterActivity, "Error de red: Comprueba tu conexión", Toast.LENGTH_LONG).show()
             } finally {
                 desbloquearUIRegister()
-
                 binding.loadingCardRegister.visibility = View.GONE
                 binding.cargandoRegister.visibility = View.GONE
             }
         }
     }
+
+    private fun validarCampos(): String? {
+        val usuario = binding.txtUsuario.text.toString().trim()
+        val correo = binding.txtEmail.text.toString().trim()
+        val password = binding.txtPassword.text.toString()
+        val confirmPassword = binding.txtConfirmPassword.text.toString()
+
+        // Validaciones de Usuario
+        if (usuario.isEmpty()) return "El nombre de usuario es obligatorio"
+        if (usuario.length < 3) return "El usuario debe tener al menos 3 caracteres"
+        if (usuario.contains(" ")) return "El nombre de usuario no puede contener espacios"
+
+        // Validaciones de Correo
+        if (correo.isEmpty()) return "El correo electrónico es obligatorio"
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) return "Ingresa un correo electrónico válido"
+
+        // Validaciones de Spinners
+        if (binding.spCarrera.selectedItemPosition <= 0) return "Por favor, selecciona tu carrera"
+        if (binding.spSemestre.selectedItemPosition <= 0) return "Por favor, selecciona tu semestre"
+
+        // Validaciones de Contraseña
+        if (password.isEmpty()) return "La contraseña es obligatoria"
+        if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres"
+        
+        // Validación de complejidad (Mayúscula, minúscula y número)
+        val passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$".toRegex()
+        if (!password.matches(passwordRegex)) {
+            return "La contraseña debe incluir al menos una mayúscula, una minúscula y un número"
+        }
+
+        if (password != confirmPassword) return "Las contraseñas no coinciden"
+
+        return null // Todo correcto
+    }
+
     private fun listener() {
         binding.spCarrera.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                if(position > 0) {
-                    val carreraSeleccionada =  parent?.getItemAtPosition(position).toString()
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0) {
+                    val carreraSeleccionada = parent?.getItemAtPosition(position).toString()
                     val nombreReal = carreraSeleccionada.substringBefore(" (")
                     spinnerHelper.llenarSemestres(nombreReal, binding.spSemestre)
                 } else {
                     spinnerHelper.llenarSemestres("x", binding.spSemestre)
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
     private suspend fun iniciarSesion(api: AuthApi, loginRequest: LoginRequest) {
-        val login = api.login(loginRequest)
-
-        if (login.isSuccessful) {
-            val authData = login.body()
-
-            authData?.let { token ->
-                TokenManager(this@RegisterActivity).saveToken(
-                    authData.token,
-                    authData.expiracion
-                )
-                val login = Intent(this@RegisterActivity, FeedActivity::class.java)
-                startActivity(login)
-                finish()
+        try {
+            val login = api.login(loginRequest)
+            if (login.isSuccessful) {
+                login.body()?.let { authData ->
+                    TokenManager(this@RegisterActivity).saveToken(authData.token, authData.expiracion)
+                    startActivity(Intent(this@RegisterActivity, FeedActivity::class.java))
+                    finish()
+                }
+            } else {
+                Toast.makeText(this, "Registro exitoso, pero error al iniciar sesión automática", Toast.LENGTH_SHORT).show()
+                finish() // Cerramos registro para que el usuario haga login manual
             }
+        } catch (e: Exception) {
+            finish()
         }
-    }
-    private fun validarCampos(): String? {
-        val usuario = binding.txtUsuario.text.toString()
-        val correo = binding.txtEmail.text.toString()
-        val password = binding.txtPassword.text.toString()
-        val confirmPassword = binding.txtConfirmPassword.text.toString()
-
-        if (usuario.isEmpty()) return "El usuario está vacío"
-        if (correo.isEmpty()) return "El correo está vacío"
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) return "Correo inválido"
-        if (password.length < 6) return "La contraseña debe tener al menos 6 caracteres"
-        if (password != confirmPassword) return "Las contraseñas no coinciden"
-        if (binding.spCarrera.selectedItemPosition == 0) return "Selecciona una carrera"
-        if (binding.spSemestre.selectedItemPosition == 0) return "Selecciona un semestre"
-
-        return null // todo bien
     }
 
     private fun bloquearUIRegister() {
@@ -175,7 +168,4 @@ class RegisterActivity : AppCompatActivity() {
         binding.spSemestre.isEnabled = true
         binding.btnRegister.isEnabled = true
     }
-
-
-
 }
