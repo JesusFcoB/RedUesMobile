@@ -10,7 +10,7 @@ data class PublicacionResponse(
     @SerializedName("autor_id")
     val idAutor: Int,
     val autor: String,
-    val contenido: String,
+    var contenido: String, // Cambiado a var para actualización instantánea
     val tipo: String,
 
     @SerializedName("fecha_creacion")
