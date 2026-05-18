@@ -16,10 +16,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    /*agrege esta baina loca, nose si salio bn pq no me cargo alv alv*/
-    buildFeatures{
-        viewBinging = true
-    }
 
     buildTypes {
         release {
