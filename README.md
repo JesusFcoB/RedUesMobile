@@ -194,22 +194,36 @@ const val BASE_URL = "https://redues.runasp.net/api/"
 | Seguidores | `DELETE` | `/v1/usuarios/{id}/seguidores` |
 
 ---
- 
 ## Capturas de pantalla
- 
+
 <div align="center">
-| Login | Registro |
-|:---:|:---:|
-| <img src="screenshots/login.png" width="220"/> | <img src="screenshots/registro.png" width="220"/> |
- 
-| Feed principal | Perfil de usuario |
-|:---:|:---:|
-| <img src="screenshots/feed.png" width="220"/> | <img src="screenshots/perfil.png" width="220"/> |
- 
-| Crear publicación | Crear apunte | Guardados |
-|:---:|:---:|:---:|
-| <img src="screenshots/publicacion.png" width="180"/> | <img src="screenshots/apunte.png" width="180"/> | <img src="screenshots/guardados.png" width="180"/> |
- 
+
+<table>
+  <tr>
+    <td align="center"><b>Login</b></td>
+    <td align="center"><b>Registro</b></td>
+    <td align="center"><b>Feed principal</b></td>
+    <td align="center"><b>Perfil de usuario</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/login.png" width="160"/></td>
+    <td><img src="screenshots/registro.png" width="160"/></td>
+    <td><img src="screenshots/feed.png" width="160"/></td>
+    <td><img src="screenshots/perfil.png" width="160"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Crear publicación</b></td>
+    <td align="center"><b>Crear apunte</b></td>
+    <td align="center"><b>Guardados</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/publicacion.png" width="160"/></td>
+    <td><img src="screenshots/apunte.png" width="160"/></td>
+    <td><img src="screenshots/guardados.png" width="160"/></td>
+  </tr>
+</table>
+
 </div>
 
 ---
