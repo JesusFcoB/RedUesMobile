@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/angkor_regular"
-        android:text="Bienvenido a RedUes"
+        android:text="Bienvenido a RedUES"
         android:textAlignment="center"
         android:textColor="@color/fondoLogin"
         android:textSize="40sp"
