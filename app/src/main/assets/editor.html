@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background-color: #dee0e3; }
+        .ck-editor__editable {
+            min-height: 250px;
+            border: none !important;
+            background-color: white !important;
+        }
+
+        /* 1. Quitamos los bordes que pone CKEditor por defecto */
+    .ck.ck-editor__editable_inline {
+        border: none !important;
+        box-shadow: none !important; /* Quita la sombra interna */
+    }
+
+    /* 2. Cambiamos el color del área de texto */
+    .ck-editor__editable {
+        min-height: 300px;
+        background-color: #dee0e3 !important; /* El color que pediste */
+        color: #1a1a1a !important;            /* Color de la fuente (oscuro para que resalte) */
+    }
+
+    /* 3. Opcional: Cambiar el color cuando el usuario hace clic (Focus) */
+    .ck.ck-editor__editable.ck-focused {
+        background-color: #dee0e3 !important; /* Mantiene el color al escribir */
+        border: none !important;
+        outline: none !important;
+    }
+
+    /* 4. Ajuste del cuerpo para que no queden bordes blancos alrededor */
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #dee0e3;
+    }
+
+        .ck-powered-by { display: none; }
+    </style>
+</head>
+<body>
+<textarea id="apunte"></textarea>
+
+<script>
+    let editorInstance;
+
+    ClassicEditor
+        .create(document.querySelector('#apunte'), {
+            // AQUÍ PEGUE TU CONFIGURACIÓN
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
+                'undo', 'redo'
+            ],
+            link: {
+                addTargetToExternalLinks: true,
+                decorators: {
+                    openInNewTab: {
+                        mode: 'automatic',
+                        callback: url => url && url.startsWith('http'),
+                        attributes: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }
+                    }
+                },
+                defaultProtocol: 'https://'
+            }
+        })
+        .then(editor => {
+            editorInstance = editor;
+            console.log("CKEditor 5 cargado en Android");
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    // Funciones de puente para Kotlin
+    function getEditorData() {
+        return editorInstance.getData();
+    }
+
+    function setEditorData(html) {
+        editorInstance.setData(html);
+    }
+
+    function clearEditorData() {
+        if (editorInstance) {
+            editorInstance.setData('');
+        }
+    }
+</script>
+</body>
+</html>
