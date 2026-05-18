@@ -35,6 +35,7 @@ class GuardadosActivity : AppCompatActivity() {
         binding.btnVolver.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+        NavigationHelper.setupBottomNavigation(this, binding.bottomNavigation)
 
     }
 

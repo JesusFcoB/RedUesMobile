@@ -14,6 +14,9 @@ import com.example.reduesmobile.data.api.PublicacionesApi
 import com.example.reduesmobile.data.dto.PublicacionRequest
 import com.example.reduesmobile.data.dto.PublicacionResponse
 import android.webkit.WebView
+import android.widget.ImageButton
+import android.widget.ImageView
+import com.example.reduesmobile.databinding.ToolbarNavigationBinding
 import kotlinx.coroutines.launch
 
 class EditarPublicacion : AppCompatActivity() {
@@ -21,6 +24,8 @@ class EditarPublicacion : AppCompatActivity() {
     private lateinit var webViewEditor: WebView
     private lateinit var etContenido: EditText
     private lateinit var btnGuardar: Button
+    private lateinit var btnVolver: ImageView
+    private lateinit var toolbar: ToolbarNavigationBinding
 
     private var idPublicacion: Int = -1
     private var tipo: String = ""
@@ -33,6 +38,11 @@ class EditarPublicacion : AppCompatActivity() {
         webViewEditor = findViewById(R.id.webViewEditorEditar)
         etContenido = findViewById(R.id.etContenidoEditar)
         btnGuardar = findViewById(R.id.btnGuardarEdicion)
+        btnVolver = findViewById(R.id.btnEditarVolver)
+
+        val viewNavigation = findViewById<View>(R.id.bottomNavigation)
+        toolbar = ToolbarNavigationBinding.bind(viewNavigation)
+        NavigationHelper.setupBottomNavigation(this, toolbar)
 
         // Recibimos los datos del post
         idPublicacion = intent.getIntExtra("idPublicacion", -1)
@@ -55,6 +65,10 @@ class EditarPublicacion : AppCompatActivity() {
             } else {
                 guardarPublicacion()
             }
+        }
+
+        btnVolver.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

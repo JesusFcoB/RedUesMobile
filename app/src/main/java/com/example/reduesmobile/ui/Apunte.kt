@@ -49,6 +49,9 @@ class Apunte : AppCompatActivity() {
                 }
             }
         }
+        binding.btnApuntesVolver.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
     }
 

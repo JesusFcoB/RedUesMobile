@@ -34,7 +34,8 @@
         <activity
             android:name=".ui.FeedActivity"
             android:exported="false" />
-        <activity android:name=".ui.EditarPublicacion" />
+        <activity android:name=".ui.EditarPublicacion"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
