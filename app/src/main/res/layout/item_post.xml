@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+    android:background="#5f0716">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:id="@+id/perfil"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top|left"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/perfil"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#5f0716" />
+
+            <TextView
+                android:id="@+id/txtUsuarioPost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Usuario"
+                android:textColor="#5f0716"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                app:layout_constraintEnd_toStartOf="@+id/btnGuardar"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/perfil"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnEliminar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|right"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:visibility="gone"
+                android:contentDescription="Eliminar"
+                android:focusable="true"
+                android:src="@drawable/delete_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnEditar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|right"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="12dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:visibility="gone"
+                android:contentDescription="Editar"
+                android:focusable="true"
+                android:src="@drawable/edit_icon"
+                app:layout_constraintEnd_toStartOf="@+id/btnEliminar"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnComentar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|right"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="Comentar"
+                android:focusable="true"
+                android:src="@drawable/comentario"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtComentarioCount"
+                app:layout_constraintTop_toBottomOf="@+id/cardContenido" />
+
+            <TextView
+                android:id="@+id/txtComentarioCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="999"
+                android:textColor="#5f0716"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnComentar"
+                app:layout_constraintEnd_toEndOf="@+id/cardContenido"
+                app:layout_constraintTop_toTopOf="@+id/btnComentar" />
+
+            <ImageView
+                android:id="@+id/btnGuardar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|right"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="Guardar publicación"
+                android:focusable="true"
+                android:src="@drawable/guardado"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnLike"
+                app:layout_constraintTop_toBottomOf="@+id/cardContenido" />
+
+            <TextView
+                android:id="@+id/txtGuardarCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="999"
+                android:textColor="#5f0716"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnGuardar"
+                app:layout_constraintStart_toEndOf="@+id/btnGuardar"
+                app:layout_constraintTop_toTopOf="@+id/btnGuardar"
+                app:layout_constraintVertical_bias="0.461" />
+
+            <ImageView
+                android:id="@+id/btnLike"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|right"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="Dar like"
+                android:focusable="true"
+                android:src="@drawable/like"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnComentar"
+                app:layout_constraintTop_toBottomOf="@+id/cardContenido" />
+
+            <TextView
+                android:id="@+id/txtLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="999"
+                android:textColor="#5f0716"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnLike"
+                app:layout_constraintStart_toEndOf="@+id/btnLike"
+                app:layout_constraintTop_toTopOf="@+id/btnLike" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardContenido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/fondoLogin"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.555"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/perfil">
+
+                <TextView
+                    android:id="@+id/txtContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:linksClickable="true"
+                    android:padding="5dp"
+                    android:text="hasiodhasidhasiohsadlihasaakujhskhadskjhdkjashkdjhaskjdhakjshdkjashkdjhaskjdhkajshdkjashkjdhaskjdhkjashdkjahskdjhaskjdhakjshdkjashkjdahskjdhaksjhdkjashdkjhkjashdfkjlashfkjhsaklfdhfskjdahsadkljfhkjsldhfkjsdhfjkhsdakljfahskjhdflkjsdhkjfhaskjlh"
+                    android:textColor="@color/black"
+                    android:textIsSelectable="true"
+                    android:textSize="16dp" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

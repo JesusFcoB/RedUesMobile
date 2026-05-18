@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginBottom="10dp"
+    android:background="@android:color/transparent"
+    android:elevation="0dp"
+    app:contentInsetStart="0dp"
+    app:contentInsetEnd="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_toolbar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/btnInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/inicio" />
+
+        <ImageView
+            android:id="@+id/btnCrearApunte"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/crear_apunte" />
+
+        <ImageView
+            android:id="@+id/btnCrearPublicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/crear_publicacion" />
+
+        <ImageView
+            android:id="@+id/btnPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/perfil_boton" />
+
+    </LinearLayout>
+</androidx.appcompat.widget.Toolbar>
