@@ -36,7 +36,7 @@
 
 **RedUES** es una plataforma social construida **exclusivamente** para la comunidad de la Universidad Estatal de Sonora. Permite a estudiantes conectarse, compartir publicaciones, crear apuntes enriquecidos, comentar, dar likes, guardar contenido y seguir a otros compañeros — todo desde su dispositivo Android.
 
-El proyecto nació para resolver una necesidad real: un espacio digital propio de la UES, con contexto académico (carrera, semestre) y sin el ruido de las redes sociales generalistas. En esta ocasion esta presente la version para Android.
+El proyecto nació para resolver una necesidad real: un espacio digital propio de la UES, con contexto académico (carrera, semestre) y sin el ruido de las redes sociales generalistas. En esta ocasión esta presente la versión para Android.
 
 ---
 
